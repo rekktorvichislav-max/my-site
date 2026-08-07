@@ -6,14 +6,14 @@ import { randomInt } from "node:crypto";
 // Определяем, находимся ли мы в процессе сборки Next.js
 const isBuild = process.env.NEXT_PHASE === 'phase-production-build';
 
-// Если это сборка — используем базу в памяти
+// === СОЗДАЁМ БАЗУ ДАННЫХ ===
+let db: DatabaseSync;
+
 if (isBuild) {
-    // Создаём пустую базу в памяти
-    const db = new DatabaseSync(':memory:');
-    // Экспортируем её как заглушку
-    export const db = db;
+    // Во время сборки — база в памяти
+    db = new DatabaseSync(':memory:');
     
-    // Выполняем минимальную инициализацию для сборки
+    // Минимальная инициализация для сборки
     db.exec(`
         CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT);
         CREATE TABLE IF NOT EXISTS sessions (id TEXT PRIMARY KEY);
@@ -24,10 +24,6 @@ if (isBuild) {
         CREATE TABLE IF NOT EXISTS saved_accounts (id INTEGER PRIMARY KEY AUTOINCREMENT);
     `);
     
-    export function now(): number { return Date.now(); }
-    export function generateUid(): string { return randomInt(1, 100000).toString().padStart(5, "0"); }
-    
-    // Пустые заглушки для миграций
     console.log('[DB] Сборка: используется база в памяти');
 } else {
     // === РЕАЛЬНАЯ БАЗА ДЛЯ ПРОДАКШЕНА ===
@@ -37,7 +33,7 @@ if (isBuild) {
         fs.mkdirSync(path.dirname(dbPath), { recursive: true });
     }
     
-    export const db = new DatabaseSync(dbPath);
+    db = new DatabaseSync(dbPath);
     
     db.exec(`
         PRAGMA journal_mode = WAL;
@@ -111,10 +107,7 @@ if (isBuild) {
         );
     `);
 
-    export function now(): number { return Date.now(); }
-    export function generateUid(): string { return randomInt(1, 100000).toString().padStart(5, "0"); }
-
-    // Миграции
+    // === МИГРАЦИИ ===
     function migrateUid() {
         const cols = db.prepare("PRAGMA table_info(users)").all() as { name: string }[];
         if (!cols.some((c) => c.name === "uid")) {
@@ -163,6 +156,19 @@ if (isBuild) {
         }
     }
     migrateDevices();
+    
+    console.log('[DB] Продакшен: база данных инициализирована');
+}
+
+// === ЭКСПОРТЫ (на верхнем уровне) ===
+export { db };
+
+export function now(): number {
+    return Date.now();
+}
+
+export function generateUid(): string {
+    return randomInt(1, 100000).toString().padStart(5, "0");
 }
 
 export interface UserRow {
