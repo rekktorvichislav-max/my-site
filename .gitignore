@@ -5,3 +5,6 @@ data/*.db
 data/*.db-*
 .env*.local
 !.env.example
+*.db
+*.sqlite
+*.sqlite3
