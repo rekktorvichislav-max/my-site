@@ -1,0 +1,185 @@
+
+> cotaxsite@1.0.0 dev
+> next dev
+
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\rekkt\package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * C:\Users\rekkt\Desktop\CotaxSite\package-lock.json
+
+   ▲ Next.js 15.5.22
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.1.44:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 3.9s
+ ○ Compiling / ...
+ ✓ Compiled / in 1314ms (615 modules)
+ GET / 200 in 2298ms
+ ✓ Compiled /dashboard in 502ms (634 modules)
+ GET /dashboard 200 in 714ms
+ GET /dashboard?tab=devices 200 in 34ms
+ GET /dashboard?tab=cabinet 200 in 34ms
+ ✓ Compiled /api/client/validate in 440ms (655 modules)
+ POST /api/client/validate 200 in 661ms
+ ✓ Compiled /api/client/auth in 220ms (657 modules)
+ POST /api/client/auth 200 in 372ms
+ ✓ Compiled /api/client/accounts in 271ms (660 modules)
+ GET /api/client/accounts 200 in 326ms
+ POST /api/client/validate 200 in 46ms
+ POST /api/client/validate 200 in 25ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 22ms
+ POST /api/client/validate 200 in 20ms
+ POST /api/client/validate 200 in 25ms
+ POST /api/client/validate 200 in 18ms
+ POST /api/client/validate 200 in 24ms
+ POST /api/client/validate 200 in 17ms
+ POST /api/client/auth 200 in 95ms
+ GET /api/client/accounts 200 in 15ms
+ POST /api/client/validate 200 in 28ms
+ POST /api/client/auth 200 in 84ms
+ GET /api/client/accounts 200 in 16ms
+ POST /api/client/validate 200 in 22ms
+ POST /api/client/validate 200 in 24ms
+ POST /api/client/validate 200 in 22ms
+ POST /api/client/validate 200 in 23ms
+ POST /api/client/validate 200 in 24ms
+ POST /api/client/validate 200 in 42ms
+ POST /api/client/validate 200 in 30ms
+ POST /api/client/validate 200 in 37ms
+ POST /api/client/validate 200 in 31ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 23ms
+ POST /api/client/validate 200 in 25ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 23ms
+ POST /api/client/validate 200 in 22ms
+ POST /api/client/validate 200 in 25ms
+ POST /api/client/validate 200 in 37ms
+ POST /api/client/validate 200 in 23ms
+ POST /api/client/validate 200 in 22ms
+ POST /api/client/validate 200 in 27ms
+ POST /api/client/validate 200 in 26ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 18ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 21ms
+ GET /dashboard?tab=cabinet 200 in 325ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/auth 200 in 84ms
+ GET /api/client/accounts 200 in 15ms
+ POST /api/client/validate 200 in 18ms
+ POST /api/client/validate 200 in 18ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 24ms
+ POST /api/client/validate 200 in 23ms
+ POST /api/client/validate 200 in 20ms
+ POST /api/client/accounts 200 in 20ms
+ POST /api/client/validate 200 in 20ms
+ POST /api/client/validate 200 in 22ms
+ POST /api/client/validate 200 in 20ms
+ POST /api/client/validate 200 in 26ms
+ POST /api/client/validate 200 in 18ms
+ GET / 200 in 80ms
+ ✓ Compiled /api/logout in 374ms (657 modules)
+ GET /api/logout 405 in 475ms
+ GET /api/logout 405 in 16ms
+ GET /api/logout 405 in 14ms
+ GET / 200 in 187ms
+ GET /dashboard 200 in 50ms
+ POST /api/logout 200 in 18ms
+ GET / 200 in 27ms
+ GET / 200 in 33ms
+ ✓ Compiled /register in 269ms (664 modules)
+ GET /register 200 in 384ms
+ ✓ Compiled /api/register in 211ms (663 modules)
+ POST /api/register 201 in 386ms
+ GET /dashboard 200 in 63ms
+ GET /dashboard 200 in 34ms
+ POST /api/logout 200 in 24ms
+ GET / 200 in 37ms
+ GET / 200 in 28ms
+ GET /register 200 in 34ms
+ ✓ Compiled /login in 260ms (670 modules)
+ GET /login 200 in 336ms
+ ✓ Compiled /api/login in 266ms (672 modules)
+ POST /api/login 200 in 391ms
+ GET /dashboard 200 in 58ms
+ GET /dashboard 200 in 33ms
+ ✓ Compiled /api/admin/subscriptions in 275ms (674 modules)
+ POST /api/admin/subscriptions 200 in 358ms
+ ✓ Compiled /api/client/validate in 352ms (441 modules)
+ POST /api/client/validate 200 in 406ms
+ GET / 200 in 90ms
+ GET /dashboard 200 in 45ms
+ GET /dashboard?tab=devices 200 in 34ms
+ GET / 200 in 28ms
+ POST /api/client/validate 200 in 20ms
+ POST /api/client/validate 200 in 18ms
+ POST /api/client/validate 200 in 29ms
+ POST /api/client/validate 200 in 18ms
+ POST /api/client/validate 200 in 23ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 24ms
+ POST /api/client/validate 200 in 20ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 20ms
+ ✓ Compiled /api/client/accounts in 249ms (431 modules)
+ POST /api/client/accounts 200 in 302ms
+ POST /api/client/validate 200 in 27ms
+ POST /api/client/validate 200 in 19ms
+ POST /api/client/validate 200 in 19ms
+ POST /api/client/validate 200 in 20ms
+ POST /api/client/validate 200 in 26ms
+ GET / 200 in 223ms
+ GET /dashboard 200 in 57ms
+ GET /dashboard 200 in 70ms
+ GET /dashboard 200 in 57ms
+ POST /api/client/validate 200 in 22ms
+ GET /dashboard 200 in 66ms
+ POST /api/client/validate 200 in 19ms
+ GET /dashboard 200 in 97ms
+ GET /dashboard?tab=devices 200 in 32ms
+ GET /dashboard?tab=cabinet 200 in 38ms
+ ✓ Compiled /api/download in 430ms (666 modules)
+ GET /api/download 404 in 523ms
+ GET /api/download 404 in 18ms
+ GET /dashboard?tab=cabinet 200 in 235ms
+ POST /api/client/validate 200 in 30ms
+ POST /api/client/validate 200 in 24ms
+ POST /api/client/validate 200 in 19ms
+ POST /api/client/validate 200 in 21ms
+ POST /api/client/validate 200 in 27ms
+ POST /api/client/validate 200 in 18ms
+ POST /api/client/validate 200 in 20ms
+ POST /api/client/validate 200 in 20ms
+ POST /api/client/validate 200 in 20ms
+ POST /api/client/validate 200 in 18ms
+ POST /api/client/validate 200 in 18ms
+ GET /dashboard?tab=cabinet 200 in 65ms
+ GET /dashboard?tab=cabinet 200 in 64ms
+ GET /dashboard?tab=cabinet 200 in 62ms
+ GET /dashboard?tab=cabinet 200 in 62ms
+ GET /dashboard?tab=cabinet 200 in 60ms
+ GET /dashboard?tab=cabinet 200 in 63ms
+ POST /api/client/validate 200 in 26ms
+ GET /dashboard?tab=devices 200 in 34ms
+ GET /dashboard?tab=cabinet 200 in 30ms
+ GET / 200 in 39ms
+ GET /dashboard 200 in 31ms
+ POST /api/client/validate 200 in 23ms
+ POST /api/client/validate 200 in 32ms
+ POST /api/client/validate 200 in 22ms
+ POST /api/client/validate 200 in 28ms
+ POST /api/client/validate 200 in 18ms
+ POST /api/client/validate 200 in 18ms
+ POST /api/client/validate 200 in 34ms
+ POST /api/client/validate 200 in 50ms
+ POST /api/client/validate 200 in 54ms
