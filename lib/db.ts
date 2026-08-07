@@ -3,14 +3,33 @@ import path from "node:path";
 import fs from "node:fs";
 import { randomInt } from "node:crypto";
 
-const dbPath = process.env.DATABASE_PATH || path.join(process.cwd(), "data", "cotax.db");
+// Определяем, находимся ли мы в режиме сборки
+const isBuild = process.env.NODE_ENV === 'production' && process.env.NEXT_PHASE === 'phase-production-build';
 
-if (!fs.existsSync(path.dirname(dbPath))) {
-  fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+// Путь к базе данных
+let dbPath: string;
+
+if (isBuild) {
+    // Во время сборки используем временную базу в памяти (или /tmp)
+    dbPath = '/tmp/cotax-build.db';
+} else {
+    // В продакшене используем /tmp (разрешено для записи на Railway)
+    dbPath = process.env.DATABASE_PATH || '/tmp/cotax.db';
 }
 
+// Создаём папку, если нужно
+if (!fs.existsSync(path.dirname(dbPath))) {
+    try {
+        fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+    } catch (e) {
+        // Игнорируем ошибки создания папки во время сборки
+    }
+}
+
+// Создаём экземпляр базы данных
 export const db = new DatabaseSync(dbPath);
 
+// Функции базы данных (оставляем как есть)
 db.exec(`
   PRAGMA journal_mode = WAL;
   PRAGMA foreign_keys = ON;
@@ -83,30 +102,15 @@ db.exec(`
   );
 `);
 
-export interface UserRow {
-  id: number;
-  uid: string | null;
-  username: string;
-  email: string;
-  password_hash: string;
-  role: string;
-  hwid: string | null;
-  hwid_bound_at: number | null;
-  lang: string;
-  created_at: number;
-  last_login: number | null;
-}
-
+// Все остальные функции (now, generateUid, migrateUid и т.д.) остаются без изменений
 export function now(): number {
   return Date.now();
 }
 
 export function generateUid(): string {
-  // 1..99999 — "00000" is reserved for the owner/admin.
   return randomInt(1, 100000).toString().padStart(5, "0");
 }
 
-// Migration: add uid column, ensure every user has a 5-digit uid.
 function migrateUid() {
   const cols = db.prepare("PRAGMA table_info(users)").all() as { name: string }[];
   if (!cols.some((c) => c.name === "uid")) {
@@ -126,7 +130,6 @@ function migrateUid() {
 }
 migrateUid();
 
-// Add from_beta column (legit granted via beta) for existing installs.
 function migrateSubscriptions() {
   const cols = db.prepare("PRAGMA table_info(subscriptions)").all() as { name: string }[];
   if (!cols.some((c) => c.name === "from_beta")) {
@@ -135,7 +138,6 @@ function migrateSubscriptions() {
 }
 migrateSubscriptions();
 
-// Add lang column for site<->client language sync on existing installs.
 function migrateLang() {
   const cols = db.prepare("PRAGMA table_info(users)").all() as { name: string }[];
   if (!cols.some((c) => c.name === "lang")) {
@@ -144,7 +146,6 @@ function migrateLang() {
 }
 migrateLang();
 
-// Backfill devices from existing HWID bindings (idempotent).
 function migrateDevices() {
   const users = db
     .prepare("SELECT id, hwid, hwid_bound_at FROM users WHERE hwid IS NOT NULL")
@@ -160,3 +161,17 @@ function migrateDevices() {
   }
 }
 migrateDevices();
+
+export interface UserRow {
+  id: number;
+  uid: string | null;
+  username: string;
+  email: string;
+  password_hash: string;
+  role: string;
+  hwid: string | null;
+  hwid_bound_at: number | null;
+  lang: string;
+  created_at: number;
+  last_login: number | null;
+}
