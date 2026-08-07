@@ -1,19 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
-  // Отключаем статическую генерацию для всех API-роутов
-  staticPageGenerationTimeout: 120,
-  // Игнорируем ошибки во время сборки
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  // Запрещаем предварительный рендеринг для API
-  experimental: {
-    runtime: 'nodejs',
-  },
+    output: 'standalone',
+    staticPageGenerationTimeout: 120,
+    typescript: {
+        ignoreBuildErrors: true,
+    },
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
+    // Убираем experimental.runtime — он больше не нужен
 }
 
 module.exports = nextConfig
