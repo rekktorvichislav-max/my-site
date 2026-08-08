@@ -134,11 +134,28 @@ export function publicUser(user: UserRow) {
     username: user.username,
     email: user.email,
     role: user.role,
+    drun: user.drun === 1,
     hwid: user.hwid,
     hwid_bound_at: user.hwid_bound_at,
     created_at: user.created_at,
     last_login: user.last_login,
   };
+}
+
+export function setUserUid(userId: number, uid: string): void {
+  db.prepare("UPDATE users SET uid = ? WHERE id = ?").run(uid, userId);
+}
+
+export function setUserRole(userId: number, role: string): void {
+  db.prepare("UPDATE users SET role = ? WHERE id = ?").run(role, userId);
+}
+
+export function setUserDrun(userId: number, drun: boolean): void {
+  db.prepare("UPDATE users SET drun = ? WHERE id = ?").run(drun ? 1 : 0, userId);
+}
+
+export function deleteUser(userId: number): void {
+  db.prepare("DELETE FROM users WHERE id = ?").run(userId);
 }
 
 export function setLastLogin(userId: number): void {

@@ -12,6 +12,7 @@ interface DashboardUser {
   username: string;
   email: string;
   role: string;
+  drun?: boolean;
   hwid: string | null;
   hwid_bound_at: number | null;
   created_at: number;
@@ -179,7 +180,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
   );
 
   return (
-    <div style={{ minHeight: "100vh" }}>
+    <div style={{ minHeight: "100vh" }} className={user.drun ? "cotax-drunk-page" : undefined}>
       <HudEditor userId={user.id} username={user.username} uid={user.uid} />
       <header
         style={{
@@ -192,13 +193,16 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
       >
         <div style={{ fontSize: 20, fontWeight: 800 }}>
           <Link href="/" style={{ color: "var(--text)" }}>
+            {user.drun && <span className="cotax-drunk-logo">🍺</span>}
             Cotax<span className="gradient-text">Client</span>
+            {user.drun && <span className="cotax-drunk-logo">🍻</span>}
           </Link>
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
           <span style={{ color: "var(--muted)", fontSize: 13 }}>
             {user.username}
             {user.role === "admin" && <span style={{ color: "var(--accent2)", marginLeft: 6 }}>admin</span>}
+            {user.drun && <span style={{ color: "var(--accent2)", marginLeft: 6 }}>drun</span>}
           </span>
           <button className="btn btn-ghost" style={{ padding: "6px 14px", fontSize: 13 }} onClick={logout}>
             {t("logout")}
@@ -504,6 +508,66 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
           </div>
         )}
       </main>
+
+      {user.drun && (
+        <>
+          <style>{`
+            @keyframes cotax-drunk-wobble {
+              0% { transform: rotate(-1.2deg); }
+              25% { transform: rotate(1.4deg) translateX(4px); }
+              50% { transform: rotate(-0.8deg); }
+              75% { transform: rotate(1.1deg) translateX(-3px); }
+              100% { transform: rotate(-1.2deg); }
+            }
+            @keyframes cotax-drunk-float {
+              0% { transform: translateY(0px); }
+              50% { transform: translateY(-12px) rotate(2deg); }
+              100% { transform: translateY(0px); }
+            }
+            @keyframes cotax-rainbow {
+              0% { filter: hue-rotate(0deg); }
+              100% { filter: hue-rotate(360deg); }
+            }
+            .cotax-drunk-page {
+              animation: cotax-drunk-wobble 0.45s ease-in-out infinite;
+              transform-origin: 50% 0%;
+            }
+            .cotax-drunk-page .card {
+              animation: cotax-drunk-float 1.4s ease-in-out infinite;
+              animation-delay: calc(var(--i, 0) * 0.15s);
+            }
+            .cotax-drunk-page .card:nth-child(2) { --i: 1; }
+            .cotax-drunk-page .card:nth-child(3) { --i: 2; }
+            .cotax-drunk-page .card:nth-child(4) { --i: 3; }
+            .cotax-drunk-page .card:nth-child(5) { --i: 4; }
+            .cotax-drunk-page .card:nth-child(6) { --i: 5; }
+            .cotax-drunk-title {
+              font-size: 22px;
+              font-weight: 900;
+              text-align: center;
+              margin-bottom: 14px;
+              background: linear-gradient(90deg, #ff5c8a, #7c5cff, #5cff9b, #ff5c8a);
+              background-size: 300% 100%;
+              -webkit-background-clip: text;
+              -webkit-text-fill-color: transparent;
+              background-clip: text;
+              animation: cotax-rainbow 3s linear infinite;
+            }
+            .cotax-drunk-logo {
+              display: inline-block;
+              animation: cotax-drunk-float 0.8s ease-in-out infinite;
+            }
+          `}</style>
+          <div style={{ padding: "10px 16px", textAlign: "center" }}>
+            <div className="cotax-drunk-title">
+              🍺 Ты в подпитии, {user.username}! 🍻
+            </div>
+            <div style={{ color: "var(--muted)", fontSize: 13 }}>
+              Упс! Тебе выдали роль drun 🥴 Не забудь выспаться. 😵💫
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

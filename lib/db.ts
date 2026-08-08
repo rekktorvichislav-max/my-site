@@ -42,6 +42,7 @@ if (!isBuild) {
       email TEXT NOT NULL UNIQUE,
       password_hash TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'user',
+      drun INTEGER NOT NULL DEFAULT 0,
       hwid TEXT,
       hwid_bound_at INTEGER,
       lang TEXT NOT NULL DEFAULT 'ru',
@@ -148,6 +149,14 @@ if (!isBuild) {
     }
   }
   migrateDevices();
+
+  function migrateDrun() {
+    const cols = db.prepare("PRAGMA table_info(users)").all() as { name: string }[];
+    if (!cols.some((c) => c.name === "drun")) {
+      db.exec("ALTER TABLE users ADD COLUMN drun INTEGER NOT NULL DEFAULT 0");
+    }
+  }
+  migrateDrun();
 }
 
 export interface UserRow {
@@ -157,6 +166,7 @@ export interface UserRow {
   email: string;
   password_hash: string;
   role: string;
+  drun: number;
   hwid: string | null;
   hwid_bound_at: number | null;
   lang: string;
