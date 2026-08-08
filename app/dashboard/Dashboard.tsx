@@ -47,6 +47,11 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
   const [resetUid, setResetUid] = useState("");
   const [resetMsg, setResetMsg] = useState("");
   const [resetErr, setResetErr] = useState("");
+  const [roleUser, setRoleUser] = useState("");
+  const [roleValue, setRoleValue] = useState("user");
+  const [roleUid, setRoleUid] = useState("");
+  const [roleMsg, setRoleMsg] = useState("");
+  const [roleErr, setRoleErr] = useState("");
   const [curPwd, setCurPwd] = useState("");
   const [newPwd, setNewPwd] = useState("");
   const [confPwd, setConfPwd] = useState("");
@@ -150,6 +155,40 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
       setAdminMsg(t("revokedSuccess", { plan, user: grantUser }));
     } catch {
       setAdminErr(t("networkError"));
+    }
+  }
+
+  async function roleAction(action: string, extra?: Record<string, unknown>) {
+    setRoleMsg("");
+    setRoleErr("");
+    try {
+      const res = await fetch("/api/admin/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: roleUser, action, ...extra }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setRoleErr(t(data.error) ?? t("roleFailed"));
+        return;
+      }
+      if (action === "set-role") setRoleMsg(t("roleSet", { role: roleValue, user: roleUser }));
+      else if (action === "set-drun") setRoleMsg(t("drunSet", { value: extra?.drun ? "on" : "off", user: roleUser }));
+      else if (action === "set-uid") setRoleMsg(t("uidSet", { uid: roleUid, user: roleUser }));
+      else if (action === "delete") {
+        setRoleMsg(t("userDeleted", { user: roleUser }));
+        setRoleUser("");
+        setRoleUid("");
+      }
+    } catch {
+      setRoleErr(t("networkError"));
+    }
+  }
+
+  function deleteUserAction() {
+    if (!roleUser) return;
+    if (confirm(`Delete user "${roleUser}"? This cannot be undone.`)) {
+      roleAction("delete");
     }
   }
 
@@ -435,6 +474,74 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                 {resetErr && <div className="error" style={{ marginTop: 6, fontSize: 13 }}>{resetErr}</div>}
                 {resetMsg && (
                   <div style={{ color: "var(--success)", fontSize: 13, marginTop: 6 }}>{resetMsg}</div>
+                )}
+              </div>
+            )}
+
+            {(user.role === "admin" && user.username === "Lake") && (
+              <div className="card" style={cardStyle}>
+                <h2 style={{ fontSize: 16, marginBottom: 6 }}>{t("adminRoles")}</h2>
+                <p style={{ color: "var(--muted)", fontSize: 12, marginBottom: 10 }}>
+                  {t("adminRolesDesc")}
+                </p>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "flex-end" }}>
+                  <div className="field" style={{ flex: 1, minWidth: 140, marginBottom: 8 }}>
+                    <label htmlFor="rluser">{t("targetUser")}</label>
+                    <input
+                      id="rluser"
+                      className="input"
+                      value={roleUser}
+                      onChange={(e) => setRoleUser(e.target.value)}
+                      placeholder="e.g. some_user"
+                      style={{ padding: "8px 10px", fontSize: 13 }}
+                    />
+                  </div>
+                  <div className="field" style={{ marginBottom: 8 }}>
+                    <label htmlFor="rlrole">{t("roleLabel")}</label>
+                    <select
+                      id="rlrole"
+                      className="input"
+                      value={roleValue}
+                      onChange={(e) => setRoleValue(e.target.value)}
+                      style={{ minWidth: 90, padding: "8px 10px", fontSize: 13 }}
+                    >
+                      <option value="user">{t("roleUser")}</option>
+                      <option value="admin">{t("roleAdmin")}</option>
+                    </select>
+                  </div>
+                  <div className="field" style={{ marginBottom: 8 }}>
+                    <label htmlFor="rluid">{t("uidLabel")}</label>
+                    <input
+                      id="rluid"
+                      className="input"
+                      value={roleUid}
+                      onChange={(e) => setRoleUid(e.target.value)}
+                      placeholder="00000"
+                      style={{ fontFamily: "monospace", width: 90, padding: "8px 10px", fontSize: 13 }}
+                    />
+                  </div>
+                  <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
+                    <button className="btn" style={{ padding: "8px 14px", fontSize: 13 }} onClick={() => roleAction("set-role", { role: roleValue })}>
+                      {t("setRole")}
+                    </button>
+                    <button className="btn" style={{ padding: "8px 14px", fontSize: 13 }} onClick={() => roleAction("set-drun", { drun: true })}>
+                      {t("toggleDrun")}
+                    </button>
+                    <button
+                      className="btn"
+                      style={{ padding: "8px 14px", fontSize: 13 }}
+                      onClick={() => roleUid && roleAction("set-uid", { uid: roleUid })}
+                    >
+                      {t("setUid")}
+                    </button>
+                    <button className="btn btn-danger" style={{ padding: "8px 14px", fontSize: 13 }} onClick={deleteUserAction}>
+                      {t("deleteUserBtn")}
+                    </button>
+                  </div>
+                </div>
+                {roleErr && <div className="error" style={{ marginTop: 6, fontSize: 13 }}>{roleErr}</div>}
+                {roleMsg && (
+                  <div style={{ color: "var(--success)", fontSize: 13, marginTop: 6 }}>{roleMsg}</div>
                 )}
               </div>
             )}
