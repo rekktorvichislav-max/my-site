@@ -37,27 +37,75 @@ export function Landing({ loggedIn, drun, username }: { loggedIn: boolean; drun?
   return (
     <div className={drun ? "cotax-drunk-page" : undefined}>
       <style>{`
-        @keyframes cotax-drunk-fly {
-          0%   { transform: translate(0px, 0px) rotate(0deg); }
-          20%  { transform: translate(14px, -22px) rotate(-8deg); }
-          40%  { transform: translate(-18px, 10px) rotate(6deg); }
-          60%  { transform: translate(10px, 18px) rotate(-4deg); }
-          80%  { transform: translate(-12px, -14px) rotate(8deg); }
-          100% { transform: translate(0px, 0px) rotate(0deg); }
+        @keyframes cotax-wobble {
+          0%, 100% { transform: rotate(0deg) translate(0, 0); }
+          25% { transform: rotate(-0.9deg) translate(6px, -8px); }
+          50% { transform: rotate(0.7deg) translate(-8px, 10px); }
+          75% { transform: rotate(-0.6deg) translate(8px, 6px); }
+        }
+        @keyframes cotax-fly-a {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          12% { transform: translate(26px, -20px) rotate(8deg); }
+          28% { transform: translate(-30px, 18px) rotate(-12deg); }
+          44% { transform: translate(22px, 28px) rotate(6deg); }
+          62% { transform: translate(-18px, -30px) rotate(-6deg); }
+          80% { transform: translate(28px, 14px) rotate(10deg); }
+        }
+        @keyframes cotax-fly-b {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          18% { transform: translate(-34px, 16px) rotate(-9deg); }
+          36% { transform: translate(24px, -26px) rotate(11deg); }
+          54% { transform: translate(-20px, 22px) rotate(-5deg); }
+          72% { transform: translate(32px, -14px) rotate(7deg); }
+        }
+        @keyframes cotax-fly-c {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          14% { transform: translate(20px, 24px) rotate(7deg); }
+          33% { transform: translate(-26px, -18px) rotate(-11deg); }
+          55% { transform: translate(30px, 12px) rotate(9deg); }
+          76% { transform: translate(-24px, 20px) rotate(-7deg); }
+        }
+        @keyframes cotax-fly-d {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          20% { transform: translate(-22px, -26px) rotate(10deg); }
+          42% { transform: translate(28px, 16px) rotate(-8deg); }
+          64% { transform: translate(-16px, 24px) rotate(6deg); }
+          84% { transform: translate(24px, -22px) rotate(-10deg); }
+        }
+        @keyframes cotax-fly-e {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          16% { transform: translate(32px, 10px) rotate(-7deg); }
+          38% { transform: translate(-28px, -24px) rotate(9deg); }
+          60% { transform: translate(18px, 20px) rotate(-9deg); }
+          82% { transform: translate(-26px, -14px) rotate(8deg); }
+        }
+        @keyframes cotax-fly-f {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          22% { transform: translate(-14px, 30px) rotate(6deg); }
+          45% { transform: translate(34px, -20px) rotate(-6deg); }
+          68% { transform: translate(-22px, -28px) rotate(12deg); }
+          86% { transform: translate(16px, 18px) rotate(-4deg); }
         }
         @keyframes cotax-rainbow {
           0% { filter: hue-rotate(0deg); }
           100% { filter: hue-rotate(360deg); }
         }
-        .cotax-drunk-page .btn {
-          display: inline-block;
-          animation: cotax-drunk-fly 1.1s ease-in-out infinite;
-          animation-delay: calc(var(--i, 0) * 0.13s);
+        .cotax-drunk-page {
+          animation: cotax-wobble 3.4s ease-in-out infinite;
         }
-        .cotax-drunk-page .btn:nth-of-type(2) { --i: 1; }
-        .cotax-drunk-page .btn:nth-of-type(3) { --i: 2; }
-        .cotax-drunk-page .btn:nth-of-type(4) { --i: 3; }
-        .cotax-drunk-title {
+        .cotax-drunk-page * {
+          animation-timing-function: ease-in-out;
+          animation-iteration-count: infinite;
+        }
+        .cotax-drunk-page *:nth-child(3n+1) { animation-name: cotax-fly-a; animation-duration: 2.1s; }
+        .cotax-drunk-page *:nth-child(3n+2) { animation-name: cotax-fly-b; animation-duration: 2.7s; }
+        .cotax-drunk-page *:nth-child(3n)   { animation-name: cotax-fly-c; animation-duration: 2.3s; }
+        .cotax-drunk-page *:nth-child(4n)   { animation-name: cotax-fly-d; animation-duration: 3.0s; }
+        .cotax-drunk-page *:nth-child(5n)   { animation-name: cotax-fly-e; animation-duration: 1.8s; }
+        .cotax-drunk-page *:nth-child(7n)   { animation-name: cotax-fly-f; animation-duration: 2.5s; }
+        .cotax-drunk-page *:nth-child(odd)  { animation-delay: -0.7s; }
+        .cotax-drunk-page *:nth-child(2n)   { animation-delay: -1.4s; }
+        .cotax-drunk-page .cotax-drunk-title {
           font-size: 20px;
           font-weight: 900;
           text-align: center;
@@ -67,11 +115,14 @@ export function Landing({ loggedIn, drun, username }: { loggedIn: boolean; drun?
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
-          animation: cotax-rainbow 3s linear infinite;
+          animation: cotax-fly-c 2.3s ease-in-out infinite, cotax-rainbow 3s linear infinite;
         }
         .cotax-drunk-logo {
           display: inline-block;
-          animation: cotax-drunk-fly 0.8s ease-in-out infinite;
+          animation-name: cotax-fly-e;
+          animation-duration: 0.9s;
+          animation-timing-function: ease-in-out;
+          animation-iteration-count: infinite;
         }
       `}</style>
       {drun && (
