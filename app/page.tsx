@@ -6,5 +6,5 @@ export default async function HomePage() {
   const token = (await cookies()).get("token")?.value;
   const user = getUserBySession(token);
 
-  return <Landing loggedIn={!!user} />;
+  return <Landing loggedIn={!!user} drun={!!user?.drun} username={user?.username ?? ""} />;
 }

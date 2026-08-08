@@ -512,35 +512,26 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
       {user.drun && (
         <>
           <style>{`
-            @keyframes cotax-drunk-wobble {
-              0% { transform: rotate(-1.2deg); }
-              25% { transform: rotate(1.4deg) translateX(4px); }
-              50% { transform: rotate(-0.8deg); }
-              75% { transform: rotate(1.1deg) translateX(-3px); }
-              100% { transform: rotate(-1.2deg); }
-            }
-            @keyframes cotax-drunk-float {
-              0% { transform: translateY(0px); }
-              50% { transform: translateY(-12px) rotate(2deg); }
-              100% { transform: translateY(0px); }
+            @keyframes cotax-drunk-fly {
+              0%   { transform: translate(0px, 0px) rotate(0deg); }
+              20%  { transform: translate(14px, -22px) rotate(-8deg); }
+              40%  { transform: translate(-18px, 10px) rotate(6deg); }
+              60%  { transform: translate(10px, 18px) rotate(-4deg); }
+              80%  { transform: translate(-12px, -14px) rotate(8deg); }
+              100% { transform: translate(0px, 0px) rotate(0deg); }
             }
             @keyframes cotax-rainbow {
               0% { filter: hue-rotate(0deg); }
               100% { filter: hue-rotate(360deg); }
             }
-            .cotax-drunk-page {
-              animation: cotax-drunk-wobble 0.45s ease-in-out infinite;
-              transform-origin: 50% 0%;
+            .cotax-drunk-page .btn {
+              display: inline-block;
+              animation: cotax-drunk-fly 1.1s ease-in-out infinite;
+              animation-delay: calc(var(--i, 0) * 0.13s);
             }
-            .cotax-drunk-page .card {
-              animation: cotax-drunk-float 1.4s ease-in-out infinite;
-              animation-delay: calc(var(--i, 0) * 0.15s);
-            }
-            .cotax-drunk-page .card:nth-child(2) { --i: 1; }
-            .cotax-drunk-page .card:nth-child(3) { --i: 2; }
-            .cotax-drunk-page .card:nth-child(4) { --i: 3; }
-            .cotax-drunk-page .card:nth-child(5) { --i: 4; }
-            .cotax-drunk-page .card:nth-child(6) { --i: 5; }
+            .cotax-drunk-page .btn:nth-of-type(2) { --i: 1; }
+            .cotax-drunk-page .btn:nth-of-type(3) { --i: 2; }
+            .cotax-drunk-page .btn:nth-of-type(4) { --i: 3; }
             .cotax-drunk-title {
               font-size: 22px;
               font-weight: 900;
@@ -555,7 +546,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
             }
             .cotax-drunk-logo {
               display: inline-block;
-              animation: cotax-drunk-float 0.8s ease-in-out infinite;
+              animation: cotax-drunk-fly 0.8s ease-in-out infinite;
             }
           `}</style>
           <div style={{ padding: "10px 16px", textAlign: "center" }}>

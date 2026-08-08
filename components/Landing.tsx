@@ -25,7 +25,7 @@ function ShieldIcon() {
   );
 }
 
-export function Landing({ loggedIn }: { loggedIn: boolean }) {
+export function Landing({ loggedIn, drun, username }: { loggedIn: boolean; drun?: boolean; username?: string }) {
   const { t } = useLang();
 
   const stats = [
@@ -35,7 +35,52 @@ export function Landing({ loggedIn }: { loggedIn: boolean }) {
   ];
 
   return (
-    <div>
+    <div className={drun ? "cotax-drunk-page" : undefined}>
+      <style>{`
+        @keyframes cotax-drunk-fly {
+          0%   { transform: translate(0px, 0px) rotate(0deg); }
+          20%  { transform: translate(14px, -22px) rotate(-8deg); }
+          40%  { transform: translate(-18px, 10px) rotate(6deg); }
+          60%  { transform: translate(10px, 18px) rotate(-4deg); }
+          80%  { transform: translate(-12px, -14px) rotate(8deg); }
+          100% { transform: translate(0px, 0px) rotate(0deg); }
+        }
+        @keyframes cotax-rainbow {
+          0% { filter: hue-rotate(0deg); }
+          100% { filter: hue-rotate(360deg); }
+        }
+        .cotax-drunk-page .btn {
+          display: inline-block;
+          animation: cotax-drunk-fly 1.1s ease-in-out infinite;
+          animation-delay: calc(var(--i, 0) * 0.13s);
+        }
+        .cotax-drunk-page .btn:nth-of-type(2) { --i: 1; }
+        .cotax-drunk-page .btn:nth-of-type(3) { --i: 2; }
+        .cotax-drunk-page .btn:nth-of-type(4) { --i: 3; }
+        .cotax-drunk-title {
+          font-size: 20px;
+          font-weight: 900;
+          text-align: center;
+          padding: 10px 16px;
+          background: linear-gradient(90deg, #ff5c8a, #7c5cff, #5cff9b, #ff5c8a);
+          background-size: 300% 100%;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          animation: cotax-rainbow 3s linear infinite;
+        }
+        .cotax-drunk-logo {
+          display: inline-block;
+          animation: cotax-drunk-fly 0.8s ease-in-out infinite;
+        }
+      `}</style>
+      {drun && (
+        <div style={{ padding: "10px 16px", textAlign: "center" }}>
+          <div className="cotax-drunk-title">
+            🍺 Ты в подпитии, {username}! 🍻
+          </div>
+        </div>
+      )}
       <header
         style={{
           display: "flex",
@@ -51,7 +96,9 @@ export function Landing({ loggedIn }: { loggedIn: boolean }) {
         }}
       >
         <div style={{ fontSize: 22, fontWeight: 800, textShadow: "0 0 18px rgba(124,92,255,0.5)" }}>
+          {drun && <span className="cotax-drunk-logo">🍺</span>}
           Cotax<span className="gradient-text">Client</span>
+          {drun && <span className="cotax-drunk-logo">🍻</span>}
         </div>
         <nav style={{ display: "flex", gap: 16, alignItems: "center" }}>
           {loggedIn ? (
