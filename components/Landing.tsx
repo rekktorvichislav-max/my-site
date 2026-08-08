@@ -76,8 +76,12 @@ export function Landing({ loggedIn, drun, username }: { loggedIn: boolean; drun?
       `}</style>
       {drun && (
         <div style={{ padding: "10px 16px", textAlign: "center" }}>
-          <div className="cotax-drunk-title">
-            🍺 Ты в подпитии, {username}! 🍻
+          <div>
+            <span style={{ fontSize: 22 }}>🍺</span>
+            <span className="cotax-drunk-title" style={{ margin: "0 8px" }}>
+              Ты в подпитии, {username}!
+            </span>
+            <span style={{ fontSize: 22 }}>🍻</span>
           </div>
         </div>
       )}

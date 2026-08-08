@@ -40,6 +40,21 @@ export function getUserByUsername(username: string): UserRow | null {
   return row<UserRow>(db.prepare("SELECT * FROM users WHERE username = ?").get(username));
 }
 
+export function usernameExistsCI(username: string): boolean {
+  return !!db.prepare("SELECT id FROM users WHERE lower(username) = lower(?)").get(username);
+}
+
+export function emailExists(email: string): boolean {
+  return !!db.prepare("SELECT id FROM users WHERE lower(email) = lower(?)").get(email);
+}
+
+export function uidExists(uid: string, excludeUserId?: number): boolean {
+  if (excludeUserId) {
+    return !!db.prepare("SELECT id FROM users WHERE uid = ? AND id != ?").get(uid, excludeUserId);
+  }
+  return !!db.prepare("SELECT id FROM users WHERE uid = ?").get(uid);
+}
+
 export function getUserByEmail(email: string): UserRow | null {
   return row<UserRow>(db.prepare("SELECT * FROM users WHERE email = ?").get(email));
 }

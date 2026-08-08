@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
-import { getUserByUsername, setUserUid, setUserRole, setUserDrun, deleteUser } from "@/lib/auth";
+import { getUserByUsername, setUserUid, setUserRole, setUserDrun, deleteUser, uidExists } from "@/lib/auth";
 
 export const runtime = "nodejs";
+
+// Role management is restricted to a single manager account (Lake by default).
+const ROLE_MANAGER = process.env.ROLE_MANAGER_USERNAME ?? "Lake";
 
 // One-time admin bootstrap: lets you promote the first admin without an
 // existing admin session. Protected by ADMIN_BOOTSTRAP_SECRET env var.
@@ -34,6 +37,9 @@ export async function POST(req: Request) {
   if (!username) {
     return NextResponse.json({ error: "username is required" }, { status: 400 });
   }
+  if (username !== ROLE_MANAGER) {
+    return NextResponse.json({ error: "Forbidden: can only manage " + ROLE_MANAGER }, { status: 403 });
+  }
 
   const user = getUserByUsername(username);
   if (!user) {
@@ -50,6 +56,9 @@ export async function POST(req: Request) {
   if (body.uid) {
     if (!/^\d{5}$/.test(body.uid.trim())) {
       return NextResponse.json({ error: "UID must be exactly 5 digits" }, { status: 400 });
+    }
+    if (uidExists(body.uid.trim(), user.id)) {
+      return NextResponse.json({ error: "UID already in use" }, { status: 409 });
     }
     setUserUid(user.id, body.uid.trim());
   }

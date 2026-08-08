@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
-import { getUserBySession, setUserUid, setUserRole, setUserDrun, deleteUser } from "@/lib/auth";
+import { getUserBySession, setUserUid, setUserRole, setUserDrun, deleteUser, uidExists } from "@/lib/auth";
 import { row } from "@/lib/sql";
 import { db } from "@/lib/db";
 
 export const runtime = "nodejs";
+
+// Role management is restricted to a single manager account (Lake by default).
+const ROLE_MANAGER = process.env.ROLE_MANAGER_USERNAME ?? "Lake";
 
 export async function POST(req: Request) {
   const token = req.headers.get("cookie")?.match(/token=([^;]+)/)?.[1];
@@ -11,7 +14,7 @@ export async function POST(req: Request) {
   if (!admin) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
-  if (admin.role !== "admin") {
+  if (admin.username !== ROLE_MANAGER) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -56,6 +59,9 @@ export async function POST(req: Request) {
       const uid = body.uid?.trim() ?? "";
       if (!/^\d{5}$/.test(uid)) {
         return NextResponse.json({ error: "UID must be exactly 5 digits" }, { status: 400 });
+      }
+      if (uidExists(uid, target.id)) {
+        return NextResponse.json({ error: "UID already in use" }, { status: 409 });
       }
       setUserUid(target.id, uid);
       return NextResponse.json({ ok: true, user: target.username, uid });

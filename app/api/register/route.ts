@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createUser, getUserByUsername, getUserByEmail, createSession, setLastLogin } from "@/lib/auth";
+import { createUser, usernameExistsCI, emailExists, createSession, setLastLogin } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -27,10 +27,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Password must be at least 6 chars" }, { status: 400 });
   }
 
-  if (getUserByUsername(username)) {
+  if (usernameExistsCI(username)) {
     return NextResponse.json({ error: "Username already taken" }, { status: 409 });
   }
-  if (getUserByEmail(email)) {
+  if (emailExists(email)) {
     return NextResponse.json({ error: "Email already registered" }, { status: 409 });
   }
 

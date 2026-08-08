@@ -550,11 +550,15 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
             }
           `}</style>
           <div style={{ padding: "10px 16px", textAlign: "center" }}>
-            <div className="cotax-drunk-title">
-              🍺 Ты в подпитии, {user.username}! 🍻
+            <div>
+              <span style={{ fontSize: 22 }}>🍺</span>
+              <span className="cotax-drunk-title" style={{ margin: "0 8px" }}>
+                Ты в подпитии, {user.username}!
+              </span>
+              <span style={{ fontSize: 22 }}>🍻</span>
             </div>
             <div style={{ color: "var(--muted)", fontSize: 13 }}>
-              Упс! Тебе выдали роль drun 🥴 Не забудь выспаться. 😵💫
+              Упс! Тебе выдали роль drun 🥴 Не забудь выспаться. 😵‍💫
             </div>
           </div>
         </>
