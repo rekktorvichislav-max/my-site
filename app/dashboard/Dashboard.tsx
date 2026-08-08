@@ -173,13 +173,34 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
         return;
       }
       if (action === "set-role") setRoleMsg(t("roleSet", { role: roleValue, user: roleUser }));
-      else if (action === "set-drun") setRoleMsg(t("drunSet", { value: extra?.drun ? "on" : "off", user: roleUser }));
+      else if (action === "set-drun") setRoleMsg(t("drunSet", { value: data.drun ? "on" : "off", user: roleUser }));
       else if (action === "set-uid") setRoleMsg(t("uidSet", { uid: roleUid, user: roleUser }));
       else if (action === "delete") {
         setRoleMsg(t("userDeleted", { user: roleUser }));
         setRoleUser("");
         setRoleUid("");
       }
+    } catch {
+      setRoleErr(t("networkError"));
+    }
+  }
+
+  async function toggleDrun() {
+    if (!roleUser) return;
+    setRoleMsg("");
+    setRoleErr("");
+    try {
+      const res = await fetch("/api/admin/user", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: roleUser, action: "get" }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setRoleErr(t(data.error) ?? t("roleFailed"));
+        return;
+      }
+      roleAction("set-drun", { drun: !data.user?.drun });
     } catch {
       setRoleErr(t("networkError"));
     }
@@ -524,7 +545,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                     <button className="btn" style={{ padding: "8px 14px", fontSize: 13 }} onClick={() => roleAction("set-role", { role: roleValue })}>
                       {t("setRole")}
                     </button>
-                    <button className="btn" style={{ padding: "8px 14px", fontSize: 13 }} onClick={() => roleAction("set-drun", { drun: true })}>
+                    <button className="btn" style={{ padding: "8px 14px", fontSize: 13 }} onClick={toggleDrun}>
                       {t("toggleDrun")}
                     </button>
                     <button

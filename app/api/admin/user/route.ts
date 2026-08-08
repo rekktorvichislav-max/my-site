@@ -20,7 +20,7 @@ export async function POST(req: Request) {
 
   let body: {
     username?: string;
-    action?: "set-role" | "set-drun" | "set-uid" | "delete";
+    action?: "get" | "set-role" | "set-drun" | "set-uid" | "delete";
     role?: string;
     drun?: boolean;
     uid?: string;
@@ -37,14 +37,17 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "username and action are required" }, { status: 400 });
   }
 
-  const target = row<{ id: number; username: string; role: string }>(
-    db.prepare("SELECT id, username, role FROM users WHERE username = ?").get(username)
+  const target = row<{ id: number; username: string; role: string; drun: number }>(
+    db.prepare("SELECT id, username, role, drun FROM users WHERE username = ?").get(username)
   );
   if (!target) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
 
   switch (action) {
+    case "get": {
+      return NextResponse.json({ ok: true, user: { id: target.id, username: target.username, role: target.role, drun: target.drun === 1 } });
+    }
     case "set-role": {
       const role = body.role?.trim() ?? "";
       if (!role) return NextResponse.json({ error: "role is required" }, { status: 400 });
