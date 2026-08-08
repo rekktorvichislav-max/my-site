@@ -57,6 +57,58 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
   const [confPwd, setConfPwd] = useState("");
   const [pwdMsg, setPwdMsg] = useState("");
   const [pwdErr, setPwdErr] = useState("");
+  const [announcing, setAnnouncing] = useState(false);
+  const [announceMsg, setAnnounceMsg] = useState("");
+  const [announceErr, setAnnounceErr] = useState("");
+  const [announceActive, setAnnounceActive] = useState(false);
+
+  async function announce() {
+    setAnnounceMsg("");
+    setAnnounceErr("");
+    setAnnouncing(true);
+    try {
+      const res = await fetch("/api/admin/announce", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active: true }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setAnnounceErr(t(data.error) ?? t("announceFailed"));
+        return;
+      }
+      setAnnounceActive(true);
+      setAnnounceMsg(t("announceSent"));
+    } catch {
+      setAnnounceErr(t("networkError"));
+    } finally {
+      setAnnouncing(false);
+    }
+  }
+
+  async function clearAnnounce() {
+    setAnnounceMsg("");
+    setAnnounceErr("");
+    setAnnouncing(true);
+    try {
+      const res = await fetch("/api/admin/announce", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ active: false }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setAnnounceErr(t(data.error) ?? t("announceFailed"));
+        return;
+      }
+      setAnnounceActive(false);
+      setAnnounceMsg(t("announceCleared"));
+    } catch {
+      setAnnounceErr(t("networkError"));
+    } finally {
+      setAnnouncing(false);
+    }
+  }
 
   async function resetHwidAdmin(e: React.FormEvent) {
     e.preventDefault();
@@ -564,6 +616,40 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                 {roleMsg && (
                   <div style={{ color: "var(--success)", fontSize: 13, marginTop: 6 }}>{roleMsg}</div>
                 )}
+              </div>
+            )}
+
+            {user.username === "Lake" && (
+              <div className="card" style={cardStyle}>
+                <h2 style={{ fontSize: 16, marginBottom: 6 }}>{t("announceTitle")}</h2>
+                <p style={{ color: "var(--muted)", fontSize: 12, marginBottom: 10 }}>
+                  {t("announceDesc")}
+                </p>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
+                  <button
+                    className="btn"
+                    style={{ padding: "8px 16px", fontSize: 13 }}
+                    disabled={announcing}
+                    onClick={announce}
+                  >
+                    {announcing ? t("announceSending") : t("announceNotify")}
+                  </button>
+                  <button
+                    className="btn btn-ghost"
+                    style={{ padding: "8px 16px", fontSize: 13 }}
+                    disabled={announcing}
+                    onClick={clearAnnounce}
+                  >
+                    {t("announceClear")}
+                  </button>
+                  {announceActive && (
+                    <span style={{ color: "var(--success)", fontSize: 13 }}>
+                      {t("announceActiveLabel")}
+                    </span>
+                  )}
+                </div>
+                {announceMsg && <div style={{ color: "var(--success)", fontSize: 13, marginTop: 6 }}>{announceMsg}</div>}
+                {announceErr && <div className="error" style={{ marginTop: 6, fontSize: 13 }}>{announceErr}</div>}
               </div>
             )}
 

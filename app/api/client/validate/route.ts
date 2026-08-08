@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getUserBySession, recordDevice } from "@/lib/auth";
 import { listSubscriptions, type Plan } from "@/lib/subscriptions";
 import { TICKET_TTL_MS, consumeNonce, issueNonce, signTicket } from "@/lib/license";
+import { getAnnouncement } from "@/lib/announce";
 
 export const runtime = "nodejs";
 
@@ -57,10 +58,16 @@ export async function POST(req: Request) {
     n: body.nonce ?? "",
   });
 
+  const a = getAnnouncement();
+  const announce = a && a.active === 1
+    ? { active: true, message: a.message ?? "Доступна новая версия клиента!", created_at: a.created_at }
+    : { active: false };
+
   return NextResponse.json({
     ok: true,
     ticket,
     nonce,
+    announce,
     user: { id: user.id, uid: user.uid, username: user.username, role: user.role, lang: user.lang ?? "ru", subscriptions: subs },
   });
 }

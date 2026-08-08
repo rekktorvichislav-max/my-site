@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import fs from "node:fs";
 import path from "node:path";
+import { getAnnouncement } from "@/lib/announce";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,5 +21,11 @@ export async function GET() {
     // ignore — fall back to the plain version
   }
 
-  return NextResponse.json({ version });
+  const a = getAnnouncement();
+  return NextResponse.json({
+    version,
+    announce: a && a.active === 1
+      ? { active: true, message: a.message ?? "Доступна новая версия клиента!", created_at: a.created_at }
+      : { active: false },
+  });
 }
