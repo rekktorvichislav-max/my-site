@@ -3,22 +3,31 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const STORAGE_KEY = "cotax_seen_client_version";
+const STORAGE_KEY = "cotax_seen_announce";
+
+interface AnnounceData {
+  version?: string;
+  announce?: { active: boolean; message?: string; created_at?: number };
+}
 
 export function UpdateToast() {
-  const [version, setVersion] = useState<string | null>(null);
+  const [data, setData] = useState<AnnounceData | null>(null);
   const [show, setShow] = useState(false);
 
   useEffect(() => {
     let mounted = true;
     fetch("/api/client/version")
       .then((r) => r.json())
-      .then((data: { version?: string }) => {
-        if (!mounted || !data.version) return;
-        const seen = localStorage.getItem(STORAGE_KEY);
-        if (seen !== data.version) {
-          setVersion(data.version);
-          setTimeout(() => setShow(true), 1200);
+      .then((json: AnnounceData) => {
+        if (!mounted) return;
+        setData(json);
+        const announce = json.announce;
+        // Показываем только когда Lake включил уведомление.
+        if (announce?.active && announce.created_at) {
+          const seen = localStorage.getItem(STORAGE_KEY);
+          if (seen !== String(announce.created_at)) {
+            setTimeout(() => setShow(true), 1200);
+          }
         }
       })
       .catch(() => {});
@@ -27,12 +36,12 @@ export function UpdateToast() {
     };
   }, []);
 
-  if (!show || !version) return null;
+  if (!show || !data) return null;
 
   const dismiss = (remember = false) => {
-    if (remember) {
+    if (remember && data.announce?.created_at != null) {
       try {
-        localStorage.setItem(STORAGE_KEY, version);
+        localStorage.setItem(STORAGE_KEY, String(data.announce.created_at));
       } catch {
         // ignore
       }
@@ -73,7 +82,7 @@ export function UpdateToast() {
         🚀 Вышло обновление!
       </div>
       <div style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", marginBottom: 10 }}>
-        Новая версия клиента доступна: <b style={{ fontFamily: "monospace" }}>{version}</b>
+        {data.announce?.message ?? "Новая версия клиента доступна"}
       </div>
       <div style={{ display: "flex", gap: 8 }}>
         <Link
