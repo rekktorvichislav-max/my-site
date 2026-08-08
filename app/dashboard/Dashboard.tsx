@@ -46,6 +46,11 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
   const [resetUid, setResetUid] = useState("");
   const [resetMsg, setResetMsg] = useState("");
   const [resetErr, setResetErr] = useState("");
+  const [curPwd, setCurPwd] = useState("");
+  const [newPwd, setNewPwd] = useState("");
+  const [confPwd, setConfPwd] = useState("");
+  const [pwdMsg, setPwdMsg] = useState("");
+  const [pwdErr, setPwdErr] = useState("");
 
   async function resetHwidAdmin(e: React.FormEvent) {
     e.preventDefault();
@@ -67,6 +72,34 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
       setResetUid("");
     } catch {
       setResetErr("Network error");
+    }
+  }
+
+  async function changePassword(e: React.FormEvent) {
+    e.preventDefault();
+    setPwdMsg("");
+    setPwdErr("");
+    if (newPwd !== confPwd) {
+      setPwdErr(t("Passwords do not match"));
+      return;
+    }
+    try {
+      const res = await fetch("/api/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword: curPwd, newPassword: newPwd, confirmPassword: confPwd }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPwdErr(t(data.error) ?? t("passwordChangeFailed"));
+        return;
+      }
+      setPwdMsg(t("passwordChanged"));
+      setCurPwd("");
+      setNewPwd("");
+      setConfPwd("");
+    } catch {
+      setPwdErr(t("networkError"));
     }
   }
 
@@ -216,6 +249,60 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                   <span style={{ color: "var(--muted)", fontSize: 14 }}>{t("hwidNotBound")}</span>
                 </div>
               )}
+            </div>
+
+            <div className="card" style={cardStyle}>
+              <h2 style={{ fontSize: 16, marginBottom: 10 }}>{t("changePassword")}</h2>
+              <form onSubmit={changePassword} style={{ display: "grid", gap: 10 }}>
+                <div className="field">
+                  <label htmlFor="curPwd">{t("currentPassword")}</label>
+                  <input
+                    id="curPwd"
+                    className="input"
+                    type="password"
+                    value={curPwd}
+                    onChange={(e) => setCurPwd(e.target.value)}
+                    autoComplete="current-password"
+                    style={{ padding: "8px 10px", fontSize: 13 }}
+                    required
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="newPwd">{t("newPassword")}</label>
+                  <input
+                    id="newPwd"
+                    className="input"
+                    type="password"
+                    value={newPwd}
+                    onChange={(e) => setNewPwd(e.target.value)}
+                    autoComplete="new-password"
+                    style={{ padding: "8px 10px", fontSize: 13 }}
+                    required
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="confPwd">{t("confirmPassword")}</label>
+                  <input
+                    id="confPwd"
+                    className="input"
+                    type="password"
+                    value={confPwd}
+                    onChange={(e) => setConfPwd(e.target.value)}
+                    autoComplete="new-password"
+                    style={{ padding: "8px 10px", fontSize: 13 }}
+                    required
+                  />
+                </div>
+                <div>
+                  <button className="btn" style={{ padding: "8px 14px", fontSize: 13 }}>
+                    {t("changePasswordBtn")}
+                  </button>
+                </div>
+                {pwdErr && <div className="error" style={{ fontSize: 13 }}>{pwdErr}</div>}
+                {pwdMsg && (
+                  <div style={{ color: "var(--success)", fontSize: 13 }}>{pwdMsg}</div>
+                )}
+              </form>
             </div>
 
             <div className="card" style={cardStyle}>

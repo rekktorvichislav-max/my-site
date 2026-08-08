@@ -74,6 +74,10 @@ export function bindHwid(userId: number, hwid: string): void {
   );
 }
 
+export function updatePassword(userId: number, password: string): void {
+  db.prepare("UPDATE users SET password_hash = ? WHERE id = ?").run(hashPassword(password), userId);
+}
+
 export function setUserLang(userId: number, lang: string): void {
   const value = lang === "en" ? "en" : "ru";
   db.prepare("UPDATE users SET lang = ? WHERE id = ?").run(value, userId);

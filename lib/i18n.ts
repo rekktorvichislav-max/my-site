@@ -84,6 +84,13 @@ const ru = {
   firstSeen: "Первый вход:",
   lastSeen: "Последний:",
   boundBadge: "● Привязан",
+  changePassword: "Сменить пароль",
+  currentPassword: "Текущий пароль",
+  newPassword: "Новый пароль",
+  confirmPassword: "Повторите новый пароль",
+  changePasswordBtn: "Сменить пароль",
+  passwordChanged: "Пароль успешно изменён",
+  passwordChangeFailed: "Не удалось изменить пароль",
   grantedSuccess: "Выдана подписка {plan} пользователю {user}",
   revokedSuccess: "Отозвана подписка {plan} у {user}",
   resetSuccess: "HWID сброшен для {user}. Сессии сохранены.",
@@ -109,6 +116,10 @@ const ru = {
   "Failed to grant": "Не удалось выдать",
   "Failed to revoke": "Не удалось отозвать",
   "Invalid JSON": "Некорректный JSON",
+  "Current password is incorrect": "Неверный текущий пароль",
+  "Passwords do not match": "Пароли не совпадают",
+  "All fields are required": "Заполните все поля",
+  "New password is the same as current": "Новый пароль совпадает с текущим",
 };
 
 const en: Record<keyof typeof ru, string> = {
@@ -188,6 +199,13 @@ const en: Record<keyof typeof ru, string> = {
   firstSeen: "First:",
   lastSeen: "Last:",
   boundBadge: "● Bound",
+  changePassword: "Change password",
+  currentPassword: "Current password",
+  newPassword: "New password",
+  confirmPassword: "Confirm new password",
+  changePasswordBtn: "Change password",
+  passwordChanged: "Password changed successfully",
+  passwordChangeFailed: "Failed to change password",
   grantedSuccess: "Granted {plan} to {user}",
   revokedSuccess: "Revoked {plan} from {user}",
   resetSuccess: "HWID reset for {user}. Their sessions are kept.",
@@ -213,6 +231,10 @@ const en: Record<keyof typeof ru, string> = {
   "Failed to grant": "Failed to grant",
   "Failed to revoke": "Failed to revoke",
   "Invalid JSON": "Invalid JSON",
+  "Current password is incorrect": "Current password is incorrect",
+  "Passwords do not match": "Passwords do not match",
+  "All fields are required": "All fields are required",
+  "New password is the same as current": "New password is the same as current",
 };
 
 export type Dict = typeof ru;
