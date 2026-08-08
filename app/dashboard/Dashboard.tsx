@@ -569,7 +569,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
 
             <div className="card" style={cardStyle}>
               <h2 style={{ fontSize: 16, marginBottom: 6 }}>{t("download")}</h2>
-              {user.subscriptions?.length ? (
+              {user.subscriptions?.length || user.role === "admin" ? (
                 <>
                   <p style={{ color: "var(--muted)", fontSize: 12, marginBottom: 10 }}>
                     {t("downloadDesc")}

@@ -21,7 +21,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
-  if (!hasPlan(user.id, "legit")) {
+  if (!hasPlan(user.id, "legit") && user.role !== "admin") {
     return NextResponse.json({ error: "noSubDownload" }, { status: 403 });
   }
 
