@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getUserByUsername, setUserUid, setUserRole, setUserDrun } from "@/lib/auth";
+import { getUserByUsername, setUserUid, setUserRole, setUserDrun, deleteUser } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -15,6 +15,7 @@ export async function POST(req: Request) {
   let body: {
     secret?: string;
     username?: string;
+    action?: "setup" | "delete";
     role?: string;
     drun?: boolean;
     uid?: string;
@@ -37,6 +38,11 @@ export async function POST(req: Request) {
   const user = getUserByUsername(username);
   if (!user) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
+  if (body.action === "delete") {
+    deleteUser(user.id);
+    return NextResponse.json({ ok: true, deleted: username });
   }
 
   if (body.role) setUserRole(user.id, body.role);
