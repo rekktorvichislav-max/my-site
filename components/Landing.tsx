@@ -542,20 +542,6 @@ export function Landing({
                 <h3 style={{ fontSize: 30, fontWeight: 800 }}>
                   <span className={row.highlight ? "gradient-text" : undefined}>{row.name}</span>
                 </h3>
-                {row.highlight && (
-                  <span
-                    style={{
-                      padding: "3px 12px",
-                      borderRadius: 999,
-                      background: "linear-gradient(135deg, #3f3f3f, #6b6b6b)",
-                      color: "#fff",
-                      fontSize: 12,
-                      fontWeight: 700,
-                    }}
-                  >
-                    {t("planPerpetual")}
-                  </span>
-                )}
               </div>
               <div
                 style={{
