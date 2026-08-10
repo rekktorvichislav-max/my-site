@@ -58,8 +58,8 @@ export function UpdateToast() {
         bottom: 20,
         zIndex: 9999,
         cursor: "pointer",
-        background: "linear-gradient(135deg, #1a1a2e, #16213e)",
-        border: "1px solid rgba(124, 92, 255, 0.4)",
+        background: "linear-gradient(135deg, #1c1c1c, #242424)",
+        border: "1px solid rgba(255, 255, 255, 0.3)",
         borderRadius: 12,
         boxShadow: "0 8px 24px rgba(0,0,0,0.45)",
         padding: "14px 18px",
@@ -74,8 +74,8 @@ export function UpdateToast() {
           100% { transform: translateY(0) scale(1); opacity: 1; }
         }
         @keyframes cotax-toast-glow {
-          0%, 100% { box-shadow: 0 8px 24px rgba(124, 92, 255, 0.35); }
-          50% { box-shadow: 0 8px 34px rgba(92, 255, 155, 0.5); }
+          0%, 100% { box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2); }
+          50% { box-shadow: 0 8px 34px rgba(255, 255, 255, 0.32); }
         }
       `}</style>
       <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 6, animation: "cotax-toast-glow 2s ease-in-out infinite" }}>
@@ -92,7 +92,7 @@ export function UpdateToast() {
             display: "inline-block",
             padding: "8px 14px",
             borderRadius: 8,
-            background: "linear-gradient(90deg, #7c5cff, #5cff9b)",
+            background: "linear-gradient(90deg, #ececec, #ababab)",
             color: "#000",
             fontWeight: 800,
             fontSize: 13,

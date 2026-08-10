@@ -17,7 +17,12 @@ interface DashboardUser {
   hwid_bound_at: number | null;
   created_at: number;
   last_login: number | null;
-  subscriptions: string[];
+  subscriptions: {
+    plan: string;
+    from_beta?: boolean;
+    granted_at?: number;
+    expires_at?: number | null;
+  }[];
 }
 
 interface Device {
@@ -41,6 +46,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
   );
   const [grantUser, setGrantUser] = useState("");
   const [grantPlan, setGrantPlan] = useState("legit");
+  const [grantDays, setGrantDays] = useState<number | null>(30);
   const [adminMsg, setAdminMsg] = useState("");
   const [adminErr, setAdminErr] = useState("");
   const [resetUser, setResetUser] = useState("");
@@ -176,7 +182,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
       const res = await fetch("/api/admin/subscriptions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username: grantUser, plan: grantPlan, action: "grant" }),
+        body: JSON.stringify({ username: grantUser, plan: grantPlan, action: "grant", days: grantDays }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -268,6 +274,14 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
   const fmt = (ts: number | null) =>
     ts ? new Date(ts).toLocaleString() : "—";
 
+  const subFor = (plan: string) => user.subscriptions?.find((s) => s.plan === plan);
+
+  const fmtExpiry = (plan: string) => {
+    const sub = subFor(plan);
+    if (!sub) return null;
+    return sub.expires_at ? fmt(sub.expires_at) : t("subPerpetual");
+  };
+
   const tabBtn = (key: "cabinet" | "devices", label: string) => (
     <button
       key={key}
@@ -329,7 +343,8 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
         </div>
 
         {tab === "cabinet" && (
-          <>
+          <div className="cabinet-grid">
+            <div>
             <div className="card" style={cardStyle}>
               <h2 style={{ fontSize: 16, marginBottom: 10 }}>{t("account")}</h2>
               <div style={{ display: "grid", gap: 4, color: "var(--muted)", fontSize: 13 }}>
@@ -426,7 +441,8 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
               <p style={{ color: "var(--muted)", fontSize: 12, marginBottom: 10 }}>{t("subscriptionsManual")}</p>
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
                 {["legit", "beta"].map((plan) => {
-                  const active = user.subscriptions?.includes(plan);
+                  const active = !!subFor(plan);
+                  const expiry = fmtExpiry(plan);
                   return (
                     <div
                       key={plan}
@@ -434,8 +450,8 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                         border: `1px solid ${active ? "var(--accent)" : "var(--border)"}`,
                         borderRadius: 10,
                         padding: "10px 14px",
-                        minWidth: 140,
-                        background: active ? "rgba(114,199,255,0.06)" : "var(--bg2)",
+                        minWidth: 180,
+                        background: active ? "rgba(255,255,255,0.05)" : "var(--bg2)",
                       }}
                     >
                       <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>
@@ -445,6 +461,11 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                         )}
                       </div>
                       <div style={{ color: "var(--muted)", fontSize: 12 }}>{t(`${plan}Desc`)}</div>
+                      {active && (
+                        <div style={{ color: "var(--muted)", fontSize: 12, marginTop: 6 }}>
+                          {t("subUntil")}: <span style={{ color: "var(--text)" }}>{expiry}</span>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -486,6 +507,23 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                     >
                       <option value="legit">{t("legit")}</option>
                       <option value="beta">{t("beta")}</option>
+                    </select>
+                  </div>
+                  <div className="field" style={{ marginBottom: 8 }}>
+                    <label htmlFor="gdays">{t("duration")}</label>
+                    <select
+                      id="gdays"
+                      className="input"
+                      value={grantDays === null ? "forever" : String(grantDays)}
+                      onChange={(e) => setGrantDays(e.target.value === "forever" ? null : Number(e.target.value))}
+                      style={{ minWidth: 110, padding: "8px 10px", fontSize: 13 }}
+                    >
+                      <option value="30">{t("buyDuration30")}</option>
+                      <option value="60">60 {t("days")}</option>
+                      <option value="90">{t("buyDuration90")}</option>
+                      <option value="180">180 {t("days")}</option>
+                      <option value="365">365 {t("days")}</option>
+                      <option value="forever">{t("subPerpetual")}</option>
                     </select>
                   </div>
                   <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
@@ -670,7 +708,64 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                 </p>
               )}
             </div>
-          </>
+            </div>
+
+            <aside style={{ position: "sticky", top: 20, display: "grid", gap: 12 }}>
+              <div className="card" style={{ padding: "16px 18px" }}>
+                <h2 style={{ fontSize: 15, marginBottom: 10 }}>{t("subscriptions")}</h2>
+                {["beta", "legit"].map((plan) => {
+                  const active = !!subFor(plan);
+                  const expiry = fmtExpiry(plan);
+                  return (
+                    <div key={plan} style={{ padding: "8px 0", borderBottom: "1px solid var(--border)", fontSize: 13 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <span style={{ fontWeight: 700 }}>{t(plan)}</span>
+                        {active && (
+                          <span style={{ color: "var(--success)", fontSize: 12 }}>{t("active")}</span>
+                        )}
+                      </div>
+                      <div style={{ color: "var(--muted)", fontSize: 12, marginTop: 2 }}>
+                        {active ? `${t("subUntil")}: ${expiry}` : t("noSubscription")}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="card" style={{ padding: "16px 18px" }}>
+                <h2 style={{ fontSize: 15, marginBottom: 6 }}>{t("contacts")}</h2>
+                <p style={{ color: "var(--muted)", fontSize: 12, marginBottom: 12 }}>{t("contactsDesc")}</p>
+                <div style={{ display: "grid", gap: 8 }}>
+                  <a
+                    href="https://t.me/cotaxclient"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="contact-link"
+                  >
+                    <span className="contact-icon" aria-hidden>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path d="M21.9 4.3a1.2 1.2 0 0 0-1.6-.9L2.6 9.7c-1 .4-1 1.8 0 2.2l4 1.3 1.5 4.7c.3.9 1.4 1.1 2 .5l2-1.8 3.8 2.8c.8.6 2 .2 2.2-.9l3.8-14.1a.8.8 0 0 0 0-.2l.2-.1Z" />
+                      </svg>
+                    </span>
+                    {t("telegram")}
+                  </a>
+                  <a
+                    href="https://discord.gg/cotax"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="contact-link"
+                  >
+                    <span className="contact-icon" aria-hidden>
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                        <path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.5 1a18.3 18.3 0 0 0-5.8 0L8.6 3a19.8 19.8 0 0 0-4.9 1.5A20.4 20.4 0 0 0 .3 17.6a19.9 19.9 0 0 0 6 3l1.3-2a13 13 0 0 1-2-1l.5-.4a14.3 14.3 0 0 0 12 0l.5.4a13 13 0 0 1-2 1l1.3 2a19.9 19.9 0 0 0 6-3A20.2 20.2 0 0 0 20.3 4.4ZM8.7 15c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Zm6.6 0c-.9 0-1.7-.9-1.7-2s.8-2 1.7-2 1.7.9 1.7 2-.8 2-1.7 2Z" />
+                      </svg>
+                    </span>
+                    {t("discord")}
+                  </a>
+                </div>
+              </div>
+            </aside>
+          </div>
         )}
 
         {tab === "devices" && (
@@ -799,7 +894,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
               font-weight: 900;
               text-align: center;
               margin-bottom: 14px;
-              background: linear-gradient(90deg, #ff5c8a, #7c5cff, #5cff9b, #ff5c8a);
+              background: linear-gradient(90deg, #ffffff, #9a9a9a, #d5d5d5, #ffffff);
               background-size: 300% 100%;
               -webkit-background-clip: text;
               -webkit-text-fill-color: transparent;

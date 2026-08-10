@@ -16,7 +16,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
-  let body: { username?: string; plan?: string; action?: "grant" | "revoke" };
+  let body: { username?: string; plan?: string; action?: "grant" | "revoke"; days?: number | null };
   try {
     body = await req.json();
   } catch {
@@ -26,12 +26,16 @@ export async function POST(req: Request) {
   const username = body.username?.trim() ?? "";
   const plan = body.plan as Plan;
   const action = body.action ?? "grant";
+  const days = body.days === undefined || body.days === null ? null : Number(body.days);
 
   if (!username || !PLANS.includes(plan)) {
     return NextResponse.json({ error: "username and plan (legit|beta) are required" }, { status: 400 });
   }
   if (action !== "grant" && action !== "revoke") {
     return NextResponse.json({ error: "action must be grant or revoke" }, { status: 400 });
+  }
+  if (days !== null && (!Number.isFinite(days) || days <= 0)) {
+    return NextResponse.json({ error: "days must be a positive number or omitted for a perpetual grant" }, { status: 400 });
   }
 
   const target = row<{ id: number; username: string; role: string }>(
@@ -42,12 +46,12 @@ export async function POST(req: Request) {
   }
 
   if (action === "grant") {
-    grantSubscription(target.id, plan, admin.id);
+    grantSubscription(target.id, plan, admin.id, false, days);
     if (plan === "beta") {
       // Beta includes Legit.
-      grantSubscription(target.id, "legit", admin.id, true);
+      grantSubscription(target.id, "legit", admin.id, true, days);
     }
-    return NextResponse.json({ ok: true, user: target.username, plan, action });
+    return NextResponse.json({ ok: true, user: target.username, plan, action, days });
   }
 
   if (plan === "beta") {

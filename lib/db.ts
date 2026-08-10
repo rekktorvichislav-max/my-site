@@ -131,6 +131,9 @@ if (!isBuild) {
     if (!cols.some((c) => c.name === "from_beta")) {
       db.exec("ALTER TABLE subscriptions ADD COLUMN from_beta INTEGER NOT NULL DEFAULT 0");
     }
+    if (!cols.some((c) => c.name === "expires_at")) {
+      db.exec("ALTER TABLE subscriptions ADD COLUMN expires_at INTEGER");
+    }
   }
   migrateSubscriptions();
 

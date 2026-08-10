@@ -14,6 +14,8 @@ export const PLAN_PRICE: Record<Plan, number> = {
   beta: 0,
 };
 
+export const DAY_MS = 24 * 60 * 60 * 1000;
+
 export interface SubscriptionRow {
   id: number;
   user_id: number;
@@ -21,11 +23,26 @@ export interface SubscriptionRow {
   granted_by: number | null;
   granted_at: number;
   from_beta: number;
+  expires_at: number | null;
+}
+
+export interface PlanExpiry {
+  plan: Plan;
+  granted_at: number;
+  from_beta: boolean;
+  expires_at: number | null;
+}
+
+export function listSubscriptionRows(userId: number): PlanExpiry[] {
+  return rows<{ plan: Plan; granted_at: number; from_beta: number; expires_at: number | null }>(
+    db.prepare("SELECT plan, granted_at, from_beta, expires_at FROM subscriptions WHERE user_id = ?").all(userId)
+  ).map((r) => ({ plan: r.plan, granted_at: r.granted_at, from_beta: r.from_beta === 1, expires_at: r.expires_at }));
 }
 
 export function listSubscriptions(userId: number): Plan[] {
-  return rows<{ plan: Plan }>(db.prepare("SELECT plan FROM subscriptions WHERE user_id = ?").all(userId))
-    .map((r) => r.plan)
+  return listSubscriptionRows(userId)
+    .filter((s) => s.expires_at === null || s.expires_at > now())
+    .map((s) => s.plan)
     .sort();
 }
 
@@ -36,18 +53,23 @@ export function hasPlan(userId: number, plan: Plan): boolean {
   return listSubscriptions(userId).includes("beta");
 }
 
+// durationDays === 0/undefined/null → perpetual (never expires).
 export function grantSubscription(
   userId: number,
   plan: Plan,
   grantedBy: number | null,
-  fromBeta = false
+  fromBeta = false,
+  durationDays: number | null = null
 ): boolean {
   if (!PLANS.includes(plan)) return false;
+  const expiresAt = durationDays && durationDays > 0 ? now() + Math.round(durationDays) * DAY_MS : null;
   const result = db
     .prepare(
-      "INSERT OR IGNORE INTO subscriptions (user_id, plan, granted_by, granted_at, from_beta) VALUES (?, ?, ?, ?, ?)"
+      "INSERT INTO subscriptions (user_id, plan, granted_by, granted_at, from_beta, expires_at) VALUES (?, ?, ?, ?, ?, ?) " +
+        "ON CONFLICT(user_id, plan) DO UPDATE SET granted_by = excluded.granted_by, granted_at = excluded.granted_at, " +
+        "from_beta = excluded.from_beta, expires_at = excluded.expires_at"
     )
-    .run(userId, plan, grantedBy, now(), fromBeta ? 1 : 0);
+    .run(userId, plan, grantedBy, now(), fromBeta ? 1 : 0, expiresAt);
   return Number(result.changes) > 0;
 }
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getUserBySession, publicUser } from "@/lib/auth";
-import { listSubscriptions } from "@/lib/subscriptions";
+import { listSubscriptionRows } from "@/lib/subscriptions";
 
 export const runtime = "nodejs";
 
@@ -12,6 +12,14 @@ export async function GET(req: Request) {
   }
   return NextResponse.json({
     ok: true,
-    user: { ...publicUser(user), subscriptions: listSubscriptions(user.id) },
+    user: {
+      ...publicUser(user),
+      subscriptions: listSubscriptionRows(user.id).map((s) => ({
+        plan: s.plan,
+        from_beta: s.from_beta,
+        granted_at: s.granted_at,
+        expires_at: s.expires_at,
+      })),
+    },
   });
 }

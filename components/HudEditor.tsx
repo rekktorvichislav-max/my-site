@@ -93,11 +93,11 @@ export function HudEditor({ userId, username, uid }: { userId: number; username:
     >
       <div
         style={{
-          background: "rgba(10,12,18,0.82)",
-          border: "1px solid rgba(124,92,255,0.35)",
+          background: "rgba(14,14,14,0.85)",
+          border: "1px solid rgba(255,255,255,0.28)",
           borderRadius: 12,
           padding: "12px",
-          boxShadow: "0 12px 40px rgba(0,0,0,0.55), 0 0 24px rgba(124,92,255,0.15)",
+          boxShadow: "0 12px 40px rgba(0,0,0,0.55), 0 0 24px rgba(255,255,255,0.08)",
           backdropFilter: "blur(8px)",
         }}
       >
@@ -121,7 +121,7 @@ export function HudEditor({ userId, username, uid }: { userId: number; username:
 
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-            <span style={{ color: "#ff5c5c", fontSize: 13 }}>♥</span>
+            <span style={{ color: "#e0e0e0", fontSize: 13 }}>♥</span>
             <span style={{ color: "#fff", fontSize: 13, fontWeight: 600 }}>20/20</span>
           </div>
           <div style={{ background: "rgba(0,0,0,0.6)", borderRadius: 6, padding: 2, border: "1px solid rgba(255,255,255,0.08)" }}>
@@ -130,8 +130,8 @@ export function HudEditor({ userId, username, uid }: { userId: number; username:
                 height: 12,
                 borderRadius: 4,
                 width: "100%",
-                background: "linear-gradient(90deg, #22c55e, #3ddc97)",
-                boxShadow: "0 0 14px rgba(61,220,151,0.65)",
+                background: "linear-gradient(90deg, #d9d9d9, #b0b0b0)",
+                boxShadow: "0 0 14px rgba(255,255,255,0.3)",
               }}
             />
           </div>

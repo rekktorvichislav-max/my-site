@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { useLang } from "./LanguageProvider";
 
 function ShieldIcon() {
   return (
-    <svg width="34" height="38" viewBox="0 0 24 28" fill="none" aria-hidden style={{ filter: "drop-shadow(0 0 10px rgba(124,92,255,0.6))" }}>
+    <svg width="34" height="38" viewBox="0 0 24 28" fill="none" aria-hidden style={{ filter: "drop-shadow(0 0 10px rgba(255,255,255,0.3))" }}>
       <defs>
         <linearGradient id="shield-grad" x1="0" y1="0" x2="24" y2="28" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#7c5cff" />
-          <stop offset="1" stopColor="#ff5c8a" />
+          <stop stopColor="#f2f2f2" />
+          <stop offset="1" stopColor="#8f8f8f" />
         </linearGradient>
       </defs>
       <path
@@ -17,7 +18,7 @@ function ShieldIcon() {
         stroke="url(#shield-grad)"
         strokeWidth="1.8"
         strokeLinejoin="round"
-        fill="rgba(124,92,255,0.14)"
+        fill="rgba(255,255,255,0.1)"
       />
       <rect x="9" y="11.5" width="6" height="7" rx="1.2" stroke="url(#shield-grad)" strokeWidth="1.5" />
       <path d="M10.2 11.5 V9.2 a1.8 1.8 0 0 1 3.6 0 v2.3" stroke="url(#shield-grad)" strokeWidth="1.5" />
@@ -25,8 +26,97 @@ function ShieldIcon() {
   );
 }
 
-export function Landing({ loggedIn, drun, username }: { loggedIn: boolean; drun?: boolean; username?: string }) {
-  const { t } = useLang();
+export function Landing({
+  loggedIn,
+  hasDownload,
+  drun,
+  username,
+}: {
+  loggedIn: boolean;
+  hasDownload?: boolean;
+  drun?: boolean;
+  username?: string;
+}) {
+  const { t, dict } = useLang();
+  const [activeFeature, setActiveFeature] = useState<number | null>(null);
+
+  const featureModules = [
+    {
+      title: t("featCombatTitle"),
+      desc: t("featCombatDesc"),
+      chips: ["Hit Aura", "Auto Totem", "Auto Swap", "Criticals", "Velocity", "Trigger Bot"],
+      mods: [
+        ["Hit Aura", t("modHitAura")],
+        ["Auto Totem", t("modAutoTotem")],
+        ["Auto Swap", t("modAutoSwap")],
+        ["Criticals", t("modCriticals")],
+        ["Velocity", t("modVelocity")],
+        ["Trigger Bot", t("modTriggerBot")],
+      ],
+    },
+    {
+      title: t("featMovementTitle"),
+      desc: t("featMovementDesc"),
+      chips: ["Speed", "Long Jump", "Fly", "Elytra Booster", "Jesus", "Strafe"],
+      mods: [
+        ["Speed", t("modSpeed")],
+        ["Long Jump", t("modLongJump")],
+        ["Fly", t("modFly")],
+        ["Elytra Booster", t("modElytraBooster")],
+        ["Jesus", t("modJesus")],
+        ["Strafe", t("modStrafe")],
+      ],
+    },
+    {
+      title: t("featPlayerTitle"),
+      desc: t("featPlayerDesc"),
+      chips: ["Auto Gapple", "Auto Brewer", "Apple Farm", "Chest Stealer", "Auto Armor", "Auto Tool"],
+      mods: [
+        ["Auto Gapple", t("modAutoGapple")],
+        ["Auto Brewer", t("modAutoBrewer")],
+        ["Apple Farm", t("modAppleFarm")],
+        ["Chest Stealer", t("modChestStealer")],
+        ["Auto Armor", t("modAutoArmor")],
+        ["Auto Tool", t("modAutoTool")],
+      ],
+    },
+    {
+      title: t("featVisualTitle"),
+      desc: t("featVisualDesc"),
+      chips: ["ESP", "Target ESP", "Tracers", "NameTags", "Trails", "ViewModel"],
+      mods: [
+        ["ESP", t("modEsp")],
+        ["Target ESP", t("modTargetEsp")],
+        ["Tracers", t("modTracers")],
+        ["NameTags", t("modNameTags")],
+        ["Trails", t("modTrails")],
+        ["ViewModel", t("modViewModel")],
+      ],
+    },
+    {
+      title: t("featHudTitle"),
+      desc: t("featHudDesc"),
+      chips: ["Hud", "Watermark", "Item Cooldown", "Arrows", "Crosshair", "Notifications"],
+      mods: [
+        ["Hud", t("modHud")],
+        ["Watermark", t("modWatermark")],
+        ["Item Cooldown", t("modItemCooldown")],
+        ["Arrows", t("modArrows")],
+        ["Crosshair", t("modCrosshair")],
+        ["Notifications", t("modNotifications")],
+      ],
+    },
+    {
+      title: t("featProtectionTitle"),
+      desc: t("featProtectionDesc"),
+      chips: ["HWID", "License", "Devices"],
+      mods: [
+        ["HWID", t("modHwid")],
+        ["License", t("modLicense")],
+        ["Devices", t("modDevices")],
+      ],
+    },
+  ];
 
   const stats = [
     { icon: <ShieldIcon />, label: t("statProtection") },
@@ -110,7 +200,7 @@ export function Landing({ loggedIn, drun, username }: { loggedIn: boolean; drun?
           font-weight: 900;
           text-align: center;
           padding: 10px 16px;
-          background: linear-gradient(90deg, #ff5c8a, #7c5cff, #5cff9b, #ff5c8a);
+          background: linear-gradient(90deg, #ffffff, #9a9a9a, #d5d5d5, #ffffff);
           background-size: 300% 100%;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -143,19 +233,28 @@ export function Landing({ loggedIn, drun, username }: { loggedIn: boolean; drun?
           alignItems: "center",
           padding: "20px 40px",
           borderBottom: "1px solid var(--border)",
-          background: "rgba(10,10,15,0.6)",
+          background: "rgba(10,10,10,0.6)",
           backdropFilter: "blur(10px)",
           position: "sticky",
           top: 0,
           zIndex: 20,
         }}
       >
-        <div style={{ fontSize: 22, fontWeight: 800, textShadow: "0 0 18px rgba(124,92,255,0.5)" }}>
+        <div style={{ fontSize: 22, fontWeight: 800, textShadow: "0 0 18px rgba(255,255,255,0.25)" }}>
           {drun && <span className="cotax-drunk-logo">🍺</span>}
           Cotax<span className="gradient-text">Client</span>
           {drun && <span className="cotax-drunk-logo">🍻</span>}
         </div>
-        <nav style={{ display: "flex", gap: 16, alignItems: "center" }}>
+        <nav style={{ display: "flex", gap: 20, alignItems: "center" }}>
+          <a href="#features" style={{ color: "var(--muted)", fontSize: 14, fontWeight: 600 }}>
+            {t("navFeatures")}
+          </a>
+          <a href="#pricing" style={{ color: "var(--muted)", fontSize: 14, fontWeight: 600 }}>
+            {t("navPricing")}
+          </a>
+          <a href="#download" style={{ color: "var(--muted)", fontSize: 14, fontWeight: 600 }}>
+            {t("navDownload")}
+          </a>
           {loggedIn ? (
             <a href="/api/logout" className="btn btn-ghost" style={{ padding: "8px 16px" }}>
               {t("logout")}
@@ -183,22 +282,22 @@ export function Landing({ loggedIn, drun, username }: { loggedIn: boolean; drun?
               textAlign: "center",
             }}
           >
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "6px 16px",
-                borderRadius: 999,
-                border: "1px solid rgba(124,92,255,0.4)",
-                background: "rgba(124,92,255,0.08)",
-                color: "var(--text)",
-                fontSize: 13,
-                fontWeight: 600,
-                boxShadow: "0 0 20px rgba(124,92,255,0.2)",
-                marginBottom: 24,
-              }}
-            >
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  padding: "6px 16px",
+                  borderRadius: 999,
+                  border: "1px solid rgba(255,255,255,0.3)",
+                  background: "rgba(255,255,255,0.06)",
+                  color: "var(--text)",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  boxShadow: "0 0 20px rgba(255,255,255,0.12)",
+                  marginBottom: 24,
+                }}
+              >
               <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--success)", boxShadow: "0 0 10px var(--success)" }} />
               Fabric 1.21.11 · v1.0
             </div>
@@ -255,25 +354,295 @@ export function Landing({ loggedIn, drun, username }: { loggedIn: boolean; drun?
           </div>
         </section>
 
-        <section style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 40px 80px" }}>
+        <section id="features" style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 40px 80px", scrollMarginTop: 90 }}>
+          <div style={{ textAlign: "center", marginBottom: 36 }}>
+            <h2 style={{ fontSize: 40, fontWeight: 800 }}>
+              {t("featuresTitle")}
+            </h2>
+            <p style={{ color: "var(--muted)", fontSize: 16, marginTop: 10 }}>
+              {t("featuresSub")}
+            </p>
+          </div>
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
               gap: 20,
               textAlign: "left",
             }}
           >
-            {[
-              { title: t("feat1Title"), desc: t("feat1Desc") },
-              { title: t("feat2Title"), desc: t("feat2Desc") },
-              { title: t("feat3Title"), desc: t("feat3Desc") },
-            ].map((f) => (
-              <div key={f.title} className="card">
+            {featureModules.map((f, i) => (
+              <div
+                key={f.title}
+                className="card feature-card"
+                role="button"
+                tabIndex={0}
+                onClick={() => setActiveFeature(i)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActiveFeature(i);
+                  }
+                }}
+              >
                 <h3 style={{ fontSize: 20, marginBottom: 8 }}>{f.title}</h3>
-                <p style={{ color: "var(--muted)", fontSize: 15 }}>{f.desc}</p>
+                <p style={{ color: "var(--muted)", fontSize: 15, marginBottom: 14 }}>{f.desc}</p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  {f.chips.map((c) => (
+                    <span key={c} className="module-chip">
+                      <span className="dot" />
+                      {c}
+                    </span>
+                  ))}
+                </div>
+                <div
+                  style={{
+                    marginTop: 16,
+                    fontSize: 13,
+                    fontWeight: 700,
+                    color: "var(--accent)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  {t("featClickHint")}
+                  <span style={{ transition: "transform 0.18s ease" }} className="feature-arrow">
+                    →
+                  </span>
+                </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {activeFeature !== null && (
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 60,
+              background: "rgba(0,0,0,0.7)",
+              backdropFilter: "blur(6px)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: 20,
+            }}
+            onClick={() => setActiveFeature(null)}
+          >
+              <div
+                className="card feature-modal"
+                style={{
+                  maxWidth: 560,
+                  width: "100%",
+                  maxHeight: "82vh",
+                  overflowY: "auto",
+                  padding: "30px 28px",
+                  borderColor: "rgba(255,255,255,0.4)",
+                  boxShadow: "0 0 44px rgba(255,255,255,0.14)",
+                }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
+                <h3 style={{ fontSize: 26, fontWeight: 800 }}>{featureModules[activeFeature].title}</h3>
+                <button
+                  onClick={() => setActiveFeature(null)}
+                  aria-label={t("featModalClose")}
+                  style={{
+                    background: "transparent",
+                    border: "none",
+                    color: "var(--muted)",
+                    fontSize: 24,
+                    lineHeight: 1,
+                    padding: "4px 8px",
+                    cursor: "pointer",
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+              <p style={{ color: "var(--muted)", fontSize: 15, marginBottom: 20 }}>
+                {featureModules[activeFeature].desc}
+              </p>
+              <div style={{ display: "grid", gap: 10 }}>
+                {featureModules[activeFeature].mods.map(([name, desc]) => (
+                  <div
+                    key={name}
+                    style={{
+                      display: "flex",
+                      gap: 14,
+                      alignItems: "flex-start",
+                      padding: "12px 14px",
+                      borderRadius: 10,
+                      background: "var(--bg2)",
+                      border: "1px solid var(--border)",
+                    }}
+                  >
+                    <span
+                      className="module-chip"
+                      style={{ flexShrink: 0, whiteSpace: "nowrap", marginTop: -1 }}
+                    >
+                      <span className="dot" />
+                      {name}
+                    </span>
+                    <span style={{ color: "var(--muted)", fontSize: 14, lineHeight: 1.45 }}>{desc}</span>
+                  </div>
+                ))}
+              </div>
+              <button
+                className="btn btn-ghost"
+                style={{ marginTop: 22, width: "100%" }}
+                onClick={() => setActiveFeature(null)}
+              >
+                {t("featModalClose")}
+              </button>
+            </div>
+          </div>
+        )}
+
+        <section id="pricing" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 40px 96px", scrollMarginTop: 90 }}>
+          <div style={{ textAlign: "center", marginBottom: 36 }}>
+            <h2 style={{ fontSize: 40, fontWeight: 800 }}>{t("buyTitle")}</h2>
+            <p style={{ color: "var(--muted)", fontSize: 16, marginTop: 10 }}>{t("buySub")}</p>
+          </div>
+
+          {[
+            {
+              key: "legit",
+              name: t("buyLegitRow"),
+              highlight: false,
+              plans: [
+                { dur: t("buyDuration30"), price: dict.buyPrices.legit[0], url: dict.buyLinks.legit30 },
+                { dur: t("buyDuration90"), price: dict.buyPrices.legit[1], url: dict.buyLinks.legit90 },
+                { dur: t("buyLifetime"), price: dict.buyPrices.legit[2], url: dict.buyLinks.legitLife },
+              ],
+            },
+            {
+              key: "beta",
+              name: t("buyBetaRow"),
+              highlight: true,
+              plans: [
+                { dur: t("buyDuration30"), price: dict.buyPrices.beta[0], url: dict.buyLinks.beta30 },
+                { dur: t("buyDuration90"), price: dict.buyPrices.beta[1], url: dict.buyLinks.beta90 },
+                { dur: t("buyLifetime"), price: dict.buyPrices.beta[2], url: dict.buyLinks.betaLife },
+              ],
+            },
+          ].map((row) => (
+            <div key={row.key} style={{ marginBottom: 40 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 12,
+                  marginBottom: 18,
+                }}
+              >
+                <h3 style={{ fontSize: 30, fontWeight: 800 }}>
+                  <span className={row.highlight ? "gradient-text" : undefined}>{row.name}</span>
+                </h3>
+                {row.highlight && (
+                  <span
+                    style={{
+                      padding: "3px 12px",
+                      borderRadius: 999,
+                      background: "linear-gradient(135deg, #3f3f3f, #6b6b6b)",
+                      color: "#fff",
+                      fontSize: 12,
+                      fontWeight: 700,
+                    }}
+                  >
+                    {t("planPerpetual")}
+                  </span>
+                )}
+              </div>
+              <div
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, 1fr)",
+                  gap: 20,
+                }}
+              >
+                {row.plans.map((p) => (
+                  <div
+                    key={p.dur}
+                    className="card"
+                    style={{
+                      padding: "24px 22px",
+                      textAlign: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      borderColor: row.highlight ? "rgba(255,255,255,0.3)" : "var(--border)",
+                    }}
+                  >
+                    <div style={{ fontSize: 15, fontWeight: 600, color: "var(--muted)" }}>{p.dur}</div>
+                    <div
+                      style={{
+                        fontSize: 34,
+                        fontWeight: 800,
+                        marginTop: 8,
+                        background: "linear-gradient(135deg, var(--accent), var(--accent2))",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        color: "transparent",
+                      }}
+                    >
+                      {p.price}
+                    </div>
+                    <a
+                      href={p.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="btn"
+                      style={{ marginTop: 18, width: "100%" }}
+                    >
+                      {t("buyBtn")}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </section>
+
+        <section
+          id="download"
+          style={{ maxWidth: 820, margin: "0 auto", padding: "0 40px 96px", scrollMarginTop: 90 }}
+        >
+          <div className="card" style={{ padding: "44px 40px", textAlign: "center" }}>
+            <h2 style={{ fontSize: 36, fontWeight: 800 }}>
+              <span className="gradient-text">{t("downloadTitle")}</span>
+            </h2>
+            <p style={{ color: "var(--muted)", fontSize: 16, marginTop: 12 }}>{t("downloadSub")}</p>
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 28, flexWrap: "wrap" }}>
+              {loggedIn && hasDownload ? (
+                <a href="/api/download" className="btn">
+                  {t("downloadBtn")}
+                </a>
+              ) : loggedIn ? (
+                <>
+                  <Link href="/dashboard" className="btn btn-ghost">
+                    {t("downloadGoCabinet")}
+                  </Link>
+                  <span
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      color: "var(--muted)",
+                      fontSize: 14,
+                    }}
+                  >
+                    {t("downloadNoSub")}
+                  </span>
+                </>
+              ) : (
+                <Link href="/login" className="btn">
+                  {t("downloadToLogin")}
+                </Link>
+              )}
+            </div>
           </div>
         </section>
       </main>

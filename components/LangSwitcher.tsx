@@ -30,7 +30,7 @@ export function LangSwitcher() {
         padding: "8px 16px",
         borderRadius: 999,
         border: "1px solid var(--border)",
-        background: "rgba(23,23,34,0.85)",
+        background: "rgba(28,28,28,0.85)",
         backdropFilter: "blur(6px)",
         color: "var(--text)",
         fontSize: 13,

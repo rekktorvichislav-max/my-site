@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { getUserBySession, publicUser, listDevices } from "@/lib/auth";
-import { listSubscriptions } from "@/lib/subscriptions";
+import { listSubscriptionRows } from "@/lib/subscriptions";
 import { Dashboard } from "./Dashboard";
 
 export const metadata = { title: "Dashboard — Cotax Client" };
@@ -15,7 +15,7 @@ export default async function DashboardPage() {
 
   return (
     <Dashboard
-      user={{ ...publicUser(user), subscriptions: listSubscriptions(user.id) }}
+      user={{ ...publicUser(user), subscriptions: listSubscriptionRows(user.id) }}
       devices={listDevices(user.id)}
     />
   );
