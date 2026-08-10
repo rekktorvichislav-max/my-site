@@ -5,6 +5,7 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useLang } from "@/components/LanguageProvider";
 import { HudEditor } from "@/components/HudEditor";
+import { SOCIAL } from "@/lib/social";
 
 interface DashboardUser {
   id: number;
@@ -737,7 +738,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                 <p style={{ color: "var(--muted)", fontSize: 12, marginBottom: 12 }}>{t("contactsDesc")}</p>
                 <div style={{ display: "grid", gap: 8 }}>
                   <a
-                    href="https://t.me/cotaxclient"
+                    href={SOCIAL.telegram}
                     target="_blank"
                     rel="noreferrer"
                     className="contact-link"
@@ -750,7 +751,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                     {t("telegram")}
                   </a>
                   <a
-                    href="https://discord.gg/cotax"
+                    href={SOCIAL.discord}
                     target="_blank"
                     rel="noreferrer"
                     className="contact-link"
