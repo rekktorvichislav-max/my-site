@@ -519,6 +519,8 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                       onChange={(e) => setGrantDays(e.target.value === "forever" ? null : Number(e.target.value))}
                       style={{ minWidth: 110, padding: "8px 10px", fontSize: 13 }}
                     >
+                      <option value="1">{t("buyDuration1")}</option>
+                      <option value="7">{t("buyDuration7")}</option>
                       <option value="30">{t("buyDuration30")}</option>
                       <option value="60">60 {t("days")}</option>
                       <option value="90">{t("buyDuration90")}</option>
