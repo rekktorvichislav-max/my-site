@@ -337,7 +337,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
         </div>
       </header>
 
-      <main style={{ maxWidth: 640, margin: "0 auto", padding: "20px 16px" }}>
+      <main style={{ maxWidth: 1000, margin: "0 auto", padding: "20px 16px" }}>
         <div style={{ display: "flex", gap: 8, marginBottom: 16, borderBottom: "1px solid var(--border)", paddingBottom: 10 }}>
           {tabBtn("cabinet", t("cabinetTab"))}
           {tabBtn("devices", t("devicesTab"))}
@@ -345,7 +345,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
 
         {tab === "cabinet" && (
           <div className="cabinet-grid">
-            <div>
+            <aside style={{ position: "sticky", top: 20, display: "grid", gap: 12 }}>
             <div className="card" style={{ padding: "16px 18px" }}>
               <h2 style={{ fontSize: 15, marginBottom: 10 }}>{t("subscriptions")}</h2>
               <div style={{ display: "grid", gap: 8 }}>
@@ -384,7 +384,9 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                 </p>
               )}
             </div>
+            </aside>
 
+            <div>
             <div className="card" style={cardStyle}>
               <h2 style={{ fontSize: 16, marginBottom: 10 }}>{t("account")}</h2>
               <div style={{ display: "grid", gap: 4, color: "var(--muted)", fontSize: 13 }}>
