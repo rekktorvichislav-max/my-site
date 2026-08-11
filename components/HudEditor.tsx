@@ -59,11 +59,16 @@ export function HudEditor({ userId, username, uid }: { userId: number; username:
       const ny = Math.min(Math.max(0, s.origY + e.clientY - s.startY), window.innerHeight - 40);
       setPos({ x: nx, y: ny });
     }
-    function up() {
+    function up(e: PointerEvent) {
       const s = dragStart.current;
       dragStart.current = null;
       setDragging(false);
-      if (s && pos) persist({ x: pos.x, y: pos.y });
+      if (s) {
+        const nx = Math.min(Math.max(0, s.origX + e.clientX - s.startX), window.innerWidth - 40);
+        const ny = Math.min(Math.max(0, s.origY + e.clientY - s.startY), window.innerHeight - 40);
+        persist({ x: nx, y: ny });
+        setPos({ x: nx, y: ny });
+      }
     }
     window.addEventListener("pointermove", move);
     window.addEventListener("pointerup", up);
