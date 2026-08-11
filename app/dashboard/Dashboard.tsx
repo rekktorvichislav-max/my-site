@@ -348,28 +348,41 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
             <div>
             <div className="card" style={{ padding: "16px 18px" }}>
               <h2 style={{ fontSize: 15, marginBottom: 10 }}>{t("subscriptions")}</h2>
+              <div style={{ display: "grid", gap: 8 }}>
+                {["legit", "beta"].map((plan) => {
+                  const active = !!subFor(plan);
+                  const expiry = fmtExpiry(plan);
+                  return (
+                    <div
+                      key={plan}
+                      style={{
+                        border: `1px solid ${active ? "var(--accent)" : "var(--border)"}`,
+                        borderRadius: 10,
+                        padding: "12px 14px",
+                        background: active
+                          ? "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))"
+                          : "var(--bg2)",
+                      }}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 2 }}>
+                        <span style={{ fontWeight: 700, fontSize: 14 }}>{t(plan)}</span>
+                        {active && (
+                          <span style={{ color: "var(--success)", fontSize: 12 }}>{t("active")}</span>
+                        )}
+                      </div>
+                      <div style={{ color: "var(--muted)", fontSize: 12 }}>{t(`${plan}Desc`)}</div>
+                      <div style={{ color: "var(--muted)", fontSize: 12, marginTop: 4 }}>
+                        {active ? `${t("subUntil")}: ${expiry}` : t("noSubscription")}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
               {!user.subscriptions?.length && (
-                <p style={{ color: "var(--muted)", fontSize: 13, marginBottom: 6 }}>
+                <p style={{ color: "var(--muted)", fontSize: 13, marginTop: 8 }}>
                   {t("noSubscription")}
                 </p>
               )}
-              {["beta", "legit"].map((plan) => {
-                const active = !!subFor(plan);
-                const expiry = fmtExpiry(plan);
-                return (
-                  <div key={plan} style={{ padding: "8px 0", borderBottom: "1px solid var(--border)", fontSize: 13 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <span style={{ fontWeight: 700 }}>{t(plan)}</span>
-                      {active && (
-                        <span style={{ color: "var(--success)", fontSize: 12 }}>{t("active")}</span>
-                      )}
-                    </div>
-                    <div style={{ color: "var(--muted)", fontSize: 12, marginTop: 2 }}>
-                      {active ? `${t("subUntil")}: ${expiry}` : t("noSubscription")}
-                    </div>
-                  </div>
-                );
-              })}
             </div>
 
             <div className="card" style={cardStyle}>
