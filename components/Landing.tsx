@@ -40,7 +40,6 @@ export function Landing({
   const { t, dict } = useLang();
   const [activeFeature, setActiveFeature] = useState<number | null>(null);
   const [downloadModal, setDownloadModal] = useState(false);
-  const [clientModal, setClientModal] = useState(false);
   const [fileName, setFileName] = useState("");
 
   const featureModules = [
@@ -608,9 +607,6 @@ export function Landing({
             <div style={{ display: "flex", gap: 12, justifyContent: "center", marginTop: 28, flexWrap: "wrap" }}>
               {loggedIn && hasDownload ? (
                 <>
-                  <button className="btn" onClick={() => setClientModal(true)}>
-                    {t("downloadBtn")}
-                  </button>
                   <button className="btn btn-ghost" onClick={() => setDownloadModal(true)}>
                     {t("downloadLoaderBtn")}
                   </button>
@@ -639,83 +635,6 @@ export function Landing({
             </div>
           </div>
         </section>
-
-        {clientModal && (
-          <div
-            style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 60,
-              background: "rgba(0,0,0,0.7)",
-              backdropFilter: "blur(6px)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 20,
-            }}
-            onClick={() => setClientModal(false)}
-          >
-            <div
-              className="card"
-              style={{
-                maxWidth: 480,
-                width: "100%",
-                padding: "30px 28px",
-                borderColor: "rgba(255,255,255,0.4)",
-                boxShadow: "0 0 44px rgba(255,255,255,0.14)",
-              }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
-                <h3 style={{ fontSize: 24, fontWeight: 800 }}>
-                  <span className="gradient-text">{t("downloadTitle")}</span>
-                </h3>
-                <button
-                  onClick={() => setClientModal(false)}
-                  aria-label={t("downloadLoaderClose")}
-                  style={{
-                    background: "transparent",
-                    border: "none",
-                    color: "var(--muted)",
-                    fontSize: 24,
-                    lineHeight: 1,
-                    padding: "4px 8px",
-                    cursor: "pointer",
-                  }}
-                >
-                  ×
-                </button>
-              </div>
-              <p style={{ color: "var(--muted)", fontSize: 15, lineHeight: 1.5 }}>{t("downloadSub")}</p>
-              <input
-                type="text"
-                value={fileName}
-                onChange={(e) => setFileName(e.target.value)}
-                placeholder={t("downloadNamePlaceholder")}
-                maxLength={64}
-                style={{
-                  marginTop: 16,
-                  width: "100%",
-                  padding: "10px 14px",
-                  fontSize: 15,
-                  background: "rgba(0,0,0,0.35)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 10,
-                  color: "var(--text)",
-                  outline: "none",
-                }}
-              />
-              <a
-                href={fileName ? `/api/download?name=${encodeURIComponent(fileName)}` : "/api/download"}
-                className="btn"
-                style={{ marginTop: 18, width: "100%" }}
-                onClick={() => setClientModal(false)}
-              >
-                {t("downloadBtn")}
-              </a>
-            </div>
-          </div>
-        )}
 
         {downloadModal && (
           <div
