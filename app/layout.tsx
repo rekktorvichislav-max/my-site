@@ -3,7 +3,6 @@ import { cookies } from "next/headers";
 import "./globals.css";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { LangSwitcher } from "@/components/LangSwitcher";
-import { UpdateToast } from "@/components/UpdateToast";
 import { detectLang } from "@/lib/i18n";
 
 export const metadata: Metadata = {
@@ -19,7 +18,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <LanguageProvider initialLang={lang}>
           {children}
           <LangSwitcher />
-          <UpdateToast />
         </LanguageProvider>
       </body>
     </html>
