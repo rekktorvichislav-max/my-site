@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    output: 'standalone',
     staticPageGenerationTimeout: 120,
     typescript: {
         ignoreBuildErrors: true,
@@ -8,7 +7,6 @@ const nextConfig = {
     eslint: {
         ignoreDuringBuilds: true,
     },
-    // Убираем experimental.runtime — он больше не нужен
 }
 
 module.exports = nextConfig
