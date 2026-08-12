@@ -47,10 +47,12 @@ export function listSubscriptions(userId: number): Plan[] {
 }
 
 export function hasPlan(userId: number, plan: Plan): boolean {
-  if (plan === "legit") {
-    return listSubscriptions(userId).includes("beta") || listSubscriptions(userId).includes("legit");
-  }
-  return listSubscriptions(userId).includes("beta");
+  return listSubscriptions(userId).includes(plan);
+}
+
+export function hasAnyPlan(userId: number): boolean {
+  const subs = listSubscriptions(userId);
+  return subs.includes("beta") || subs.includes("legit");
 }
 
 // durationDays === 0/undefined/null → perpetual (never expires).

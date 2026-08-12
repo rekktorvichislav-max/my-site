@@ -3,17 +3,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { getUserBySession } from "@/lib/auth";
 import { hasAnyPlan } from "@/lib/subscriptions";
-import { db, now } from "@/lib/db";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-
-function safeFileName(raw: string | null, fallback: string): string {
-  const name = (raw ?? "").replace(/[^a-zA-Z0-9._-]/g, "").slice(0, 64).trim();
-  if (!name) return fallback;
-  const ext = fallback.includes(".") ? fallback.slice(fallback.lastIndexOf(".")) : "";
-  return name.endsWith(ext) ? name : name + ext;
-}
 
 function getTokenFromRequest(req: Request): string | undefined {
   const auth = req.headers.get("authorization");
@@ -21,6 +13,7 @@ function getTokenFromRequest(req: Request): string | undefined {
   return req.headers.get("cookie")?.match(/token=([^;]+)/)?.[1];
 }
 
+// The JVMTI agent jar that the loader attaches to the running Minecraft JVM.
 export async function GET(req: Request) {
   const token = getTokenFromRequest(req);
   const user = getUserBySession(token);
@@ -28,30 +21,27 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
+  const hwid = req.headers.get("x-cotax-hwid") ?? "";
+  if (user.hwid && user.hwid !== hwid) {
+    return NextResponse.json({ error: "HWID mismatch" }, { status: 403 });
+  }
+
   if (!hasAnyPlan(user.id) && user.role !== "admin") {
     return NextResponse.json({ error: "noSubDownload" }, { status: 403 });
   }
 
-  const clientPath = process.env.CLIENT_FILE_PATH ?? path.join(process.cwd(), "data", "client", "cotax-client.jar");
-  if (!fs.existsSync(clientPath)) {
-    return NextResponse.json({ error: "Client build not available" }, { status: 404 });
+  const agentPath = process.env.AGENT_FILE_PATH ?? path.join(process.cwd(), "data", "client", "cotax-agent.jar");
+  if (!fs.existsSync(agentPath)) {
+    return NextResponse.json({ error: "Payload not available" }, { status: 404 });
   }
 
-  const fileName = safeFileName(new URL(req.url).searchParams.get("name"), "cotax-client.jar");
-
-  db.prepare("INSERT INTO downloads (user_id, file, created_at) VALUES (?, ?, ?)").run(
-    user.id,
-    fileName,
-    now()
-  );
-
-  const stat = fs.statSync(clientPath);
-  const body = fs.readFileSync(clientPath);
+  const stat = fs.statSync(agentPath);
+  const body = fs.readFileSync(agentPath);
   return new NextResponse(body, {
     headers: {
       "Content-Type": "application/java-archive",
-      "Content-Disposition": `attachment; filename="${fileName}"`,
       "Content-Length": String(stat.size),
+      "Cache-Control": "no-store",
     },
   });
 }

@@ -128,6 +128,11 @@ const ru = {
   downloadNoSub: "Скачивание доступно только с активной подпиской.",
   downloadGoCabinet: "Открыть кабинет",
   downloadToLogin: "Войти для скачивания",
+  downloadLoaderTitle: "Скачать загрузчик",
+  downloadLoaderSub: "Консольный загрузчик: вход, HWID-проверка, выбор подписки и инъекция в запущенный Minecraft.",
+  downloadLoaderBtn: "Скачать загрузчик",
+  downloadLoaderClose: "Закрыть",
+  downloadNamePlaceholder: "Название файла (необязательно)",
 
   welcomeBack: "С возвращением",
   signinSub: "Войдите в свой аккаунт Cotax Client",
@@ -379,6 +384,11 @@ const en: { [K in keyof typeof ru]: (typeof ru)[K] } = {
   downloadNoSub: "Download requires an active subscription.",
   downloadGoCabinet: "Open cabinet",
   downloadToLogin: "Log in to download",
+  downloadLoaderTitle: "Download the loader",
+  downloadLoaderSub: "Console loader: login, HWID check, subscription pick and injection into the running Minecraft.",
+  downloadLoaderBtn: "Download loader",
+  downloadLoaderClose: "Close",
+  downloadNamePlaceholder: "File name (optional)",
 
   welcomeBack: "Welcome back",
   signinSub: "Sign in to your Cotax Client account",

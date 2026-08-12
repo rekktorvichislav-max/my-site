@@ -47,19 +47,13 @@ export async function POST(req: Request) {
 
   if (action === "grant") {
     grantSubscription(target.id, plan, admin.id, false, days);
-    if (plan === "beta") {
-      // Beta includes Legit.
-      grantSubscription(target.id, "legit", admin.id, true, days);
-    }
     return NextResponse.json({ ok: true, user: target.username, plan, action, days });
   }
 
   if (plan === "beta") {
     revokeSubscription(target.id, "beta");
-    // Remove the Legit granted via Beta, keep a standalone Legit if the user bought it.
-    revokeSubscription(target.id, "legit", true);
   } else {
-    revokeSubscription(target.id, "legit", false);
+    revokeSubscription(target.id, "legit");
   }
   return NextResponse.json({ ok: true, user: target.username, plan, action });
 }

@@ -32,12 +32,12 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "noSubDownload" }, { status: 403 });
   }
 
-  const clientPath = process.env.CLIENT_FILE_PATH ?? path.join(process.cwd(), "data", "client", "cotax-client.jar");
-  if (!fs.existsSync(clientPath)) {
-    return NextResponse.json({ error: "Client build not available" }, { status: 404 });
+  const loaderPath = process.env.LOADER_FILE_PATH ?? path.join(process.cwd(), "data", "client", "cotax-loader.exe");
+  if (!fs.existsSync(loaderPath)) {
+    return NextResponse.json({ error: "Loader build not available" }, { status: 404 });
   }
 
-  const fileName = safeFileName(new URL(req.url).searchParams.get("name"), "cotax-client.jar");
+  const fileName = safeFileName(new URL(req.url).searchParams.get("name"), "cotax-loader.exe");
 
   db.prepare("INSERT INTO downloads (user_id, file, created_at) VALUES (?, ?, ?)").run(
     user.id,
@@ -45,11 +45,11 @@ export async function GET(req: Request) {
     now()
   );
 
-  const stat = fs.statSync(clientPath);
-  const body = fs.readFileSync(clientPath);
+  const stat = fs.statSync(loaderPath);
+  const body = fs.readFileSync(loaderPath);
   return new NextResponse(body, {
     headers: {
-      "Content-Type": "application/java-archive",
+      "Content-Type": "application/octet-stream",
       "Content-Disposition": `attachment; filename="${fileName}"`,
       "Content-Length": String(stat.size),
     },
