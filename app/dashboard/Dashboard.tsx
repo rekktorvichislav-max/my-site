@@ -826,7 +826,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                 {t("downloadLoaderBtn")}
               </a>
               <a
-                href="/api/download"
+                href={fileName ? `/api/download?name=${encodeURIComponent(fileName)}` : "/api/download"}
                 className="btn btn-ghost"
                 style={{ marginTop: 10, width: "100%" }}
                 onClick={() => setClientModal(false)}

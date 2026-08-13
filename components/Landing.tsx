@@ -710,7 +710,7 @@ export function Landing({
                 {t("downloadLoaderBtn")}
               </a>
               <a
-                href="/api/download"
+                href={fileName ? `/api/download?name=${encodeURIComponent(fileName)}` : "/api/download"}
                 className="btn btn-ghost"
                 style={{ marginTop: 10, width: "100%" }}
                 onClick={() => setDownloadModal(false)}
