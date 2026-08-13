@@ -823,7 +823,15 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
                 style={{ marginTop: 18, width: "100%" }}
                 onClick={() => setClientModal(false)}
               >
-                {t("downloadClient")}
+                {t("downloadLoaderBtn")}
+              </a>
+              <a
+                href="/api/download"
+                className="btn btn-ghost"
+                style={{ marginTop: 10, width: "100%" }}
+                onClick={() => setClientModal(false)}
+              >
+                {t("downloadJarBtn")}
               </a>
             </div>
           </div>
