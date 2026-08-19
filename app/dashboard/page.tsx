@@ -4,7 +4,7 @@ import { getUserBySession, publicUser, listDevices } from "@/lib/auth";
 import { listSubscriptionRows } from "@/lib/subscriptions";
 import { Dashboard } from "./Dashboard";
 
-export const metadata = { title: "Dashboard — Cotax Client" };
+export const metadata = { title: "Dashboard — Axion Client" };
 
 export default async function DashboardPage() {
   const token = (await cookies()).get("token")?.value;

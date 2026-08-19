@@ -309,7 +309,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
   );
 
   return (
-    <div style={{ minHeight: "100vh" }} className={user.drun ? "cotax-drunk-page" : undefined}>
+    <div style={{ minHeight: "100vh" }} className={user.drun ? "axion-drunk-page" : undefined}>
       <HudEditor userId={user.id} username={user.username} uid={user.uid} />
       <header
         style={{
@@ -322,9 +322,9 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
       >
         <div style={{ fontSize: 20, fontWeight: 800 }}>
           <Link href="/" style={{ color: "var(--text)" }}>
-            {user.drun && <span className="cotax-drunk-logo">🍺</span>}
-            Cotax<span className="gradient-text">Client</span>
-            {user.drun && <span className="cotax-drunk-logo">🍻</span>}
+            {user.drun && <span className="axion-drunk-logo">🍺</span>}
+            Axion<span className="gradient-text">Client</span>
+            {user.drun && <span className="axion-drunk-logo">🍻</span>}
           </Link>
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
@@ -882,13 +882,13 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
       {user.drun && (
         <>
           <style>{`
-            @keyframes cotax-wobble {
+            @keyframes axion-wobble {
               0%, 100% { transform: rotate(0deg) translate(0, 0); }
               25% { transform: rotate(-0.9deg) translate(6px, -8px); }
               50% { transform: rotate(0.7deg) translate(-8px, 10px); }
               75% { transform: rotate(-0.6deg) translate(8px, 6px); }
             }
-            @keyframes cotax-fly-a {
+            @keyframes axion-fly-a {
               0%, 100% { transform: translate(0, 0) rotate(0deg); }
               12% { transform: translate(26px, -20px) rotate(8deg); }
               28% { transform: translate(-30px, 18px) rotate(-12deg); }
@@ -896,61 +896,61 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
               62% { transform: translate(-18px, -30px) rotate(-6deg); }
               80% { transform: translate(28px, 14px) rotate(10deg); }
             }
-            @keyframes cotax-fly-b {
+            @keyframes axion-fly-b {
               0%, 100% { transform: translate(0, 0) rotate(0deg); }
               18% { transform: translate(-34px, 16px) rotate(-9deg); }
               36% { transform: translate(24px, -26px) rotate(11deg); }
               54% { transform: translate(-20px, 22px) rotate(-5deg); }
               72% { transform: translate(32px, -14px) rotate(7deg); }
             }
-            @keyframes cotax-fly-c {
+            @keyframes axion-fly-c {
               0%, 100% { transform: translate(0, 0) rotate(0deg); }
               14% { transform: translate(20px, 24px) rotate(7deg); }
               33% { transform: translate(-26px, -18px) rotate(-11deg); }
               55% { transform: translate(30px, 12px) rotate(9deg); }
               76% { transform: translate(-24px, 20px) rotate(-7deg); }
             }
-            @keyframes cotax-fly-d {
+            @keyframes axion-fly-d {
               0%, 100% { transform: translate(0, 0) rotate(0deg); }
               20% { transform: translate(-22px, -26px) rotate(10deg); }
               42% { transform: translate(28px, 16px) rotate(-8deg); }
               64% { transform: translate(-16px, 24px) rotate(6deg); }
               84% { transform: translate(24px, -22px) rotate(-10deg); }
             }
-            @keyframes cotax-fly-e {
+            @keyframes axion-fly-e {
               0%, 100% { transform: translate(0, 0) rotate(0deg); }
               16% { transform: translate(32px, 10px) rotate(-7deg); }
               38% { transform: translate(-28px, -24px) rotate(9deg); }
               60% { transform: translate(18px, 20px) rotate(-9deg); }
               82% { transform: translate(-26px, -14px) rotate(8deg); }
             }
-            @keyframes cotax-fly-f {
+            @keyframes axion-fly-f {
               0%, 100% { transform: translate(0, 0) rotate(0deg); }
               22% { transform: translate(-14px, 30px) rotate(6deg); }
               45% { transform: translate(34px, -20px) rotate(-6deg); }
               68% { transform: translate(-22px, -28px) rotate(12deg); }
               86% { transform: translate(16px, 18px) rotate(-4deg); }
             }
-            @keyframes cotax-rainbow {
+            @keyframes axion-rainbow {
               0% { filter: hue-rotate(0deg); }
               100% { filter: hue-rotate(360deg); }
             }
-            .cotax-drunk-page {
-              animation: cotax-wobble 3.4s ease-in-out infinite;
+            .axion-drunk-page {
+              animation: axion-wobble 3.4s ease-in-out infinite;
             }
-            .cotax-drunk-page * {
+            .axion-drunk-page * {
               animation-timing-function: ease-in-out;
               animation-iteration-count: infinite;
             }
-            .cotax-drunk-page *:nth-child(3n+1) { animation-name: cotax-fly-a; animation-duration: 2.1s; }
-            .cotax-drunk-page *:nth-child(3n+2) { animation-name: cotax-fly-b; animation-duration: 2.7s; }
-            .cotax-drunk-page *:nth-child(3n)   { animation-name: cotax-fly-c; animation-duration: 2.3s; }
-            .cotax-drunk-page *:nth-child(4n)   { animation-name: cotax-fly-d; animation-duration: 3.0s; }
-            .cotax-drunk-page *:nth-child(5n)   { animation-name: cotax-fly-e; animation-duration: 1.8s; }
-            .cotax-drunk-page *:nth-child(7n)   { animation-name: cotax-fly-f; animation-duration: 2.5s; }
-            .cotax-drunk-page *:nth-child(odd)  { animation-delay: -0.7s; }
-            .cotax-drunk-page *:nth-child(2n)   { animation-delay: -1.4s; }
-            .cotax-drunk-page .cotax-drunk-title {
+            .axion-drunk-page *:nth-child(3n+1) { animation-name: axion-fly-a; animation-duration: 2.1s; }
+            .axion-drunk-page *:nth-child(3n+2) { animation-name: axion-fly-b; animation-duration: 2.7s; }
+            .axion-drunk-page *:nth-child(3n)   { animation-name: axion-fly-c; animation-duration: 2.3s; }
+            .axion-drunk-page *:nth-child(4n)   { animation-name: axion-fly-d; animation-duration: 3.0s; }
+            .axion-drunk-page *:nth-child(5n)   { animation-name: axion-fly-e; animation-duration: 1.8s; }
+            .axion-drunk-page *:nth-child(7n)   { animation-name: axion-fly-f; animation-duration: 2.5s; }
+            .axion-drunk-page *:nth-child(odd)  { animation-delay: -0.7s; }
+            .axion-drunk-page *:nth-child(2n)   { animation-delay: -1.4s; }
+            .axion-drunk-page .axion-drunk-title {
               font-size: 22px;
               font-weight: 900;
               text-align: center;
@@ -960,11 +960,11 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
               -webkit-background-clip: text;
               -webkit-text-fill-color: transparent;
               background-clip: text;
-              animation: cotax-fly-c 2.3s ease-in-out infinite, cotax-rainbow 3s linear infinite;
+              animation: axion-fly-c 2.3s ease-in-out infinite, axion-rainbow 3s linear infinite;
             }
-            .cotax-drunk-logo {
+            .axion-drunk-logo {
               display: inline-block;
-              animation-name: cotax-fly-e;
+              animation-name: axion-fly-e;
               animation-duration: 0.9s;
               animation-timing-function: ease-in-out;
               animation-iteration-count: infinite;
@@ -973,7 +973,7 @@ export function Dashboard({ user, devices }: { user: DashboardUser; devices: Dev
           <div style={{ padding: "10px 16px", textAlign: "center" }}>
             <div>
               <span style={{ fontSize: 22 }}>🍺</span>
-              <span className="cotax-drunk-title" style={{ margin: "0 8px" }}>
+              <span className="axion-drunk-title" style={{ margin: "0 8px" }}>
                 Ты в подпитии, {user.username}!
               </span>
               <span style={{ fontSize: 22 }}>🍻</span>

@@ -14,12 +14,12 @@ const ru = {
   cabinet: "Кабинет",
   dashboard: "Панель",
   downloadClient: "Скачать мод",
-  brand: "CotaxClient",
+  brand: "Axion Client",
 
   tagline1: "Приватный Minecraft клиент",
   tagline2: "создан для серьёзных игроков",
   heroDesc:
-    "Cotax Client — приватный utility-клиент с фокусом на PvP, плавные анимации и чистый интерфейс. Доступ защищён HWID-лицензированием.",
+    "Axion Client — приватный utility-клиент с фокусом на PvP, плавные анимации и чистый интерфейс. Доступ защищён HWID-лицензированием.",
   statProtection: "HWID-защита",
   statFabric: "Fabric",
   statFps: "низкая нагрузка на FPS",
@@ -122,7 +122,7 @@ const ru = {
     betaLife: "https://funpay.com/lots/offer?id=74618024",
   },
 
-  downloadTitle: "Скачать Cotax Client",
+  downloadTitle: "Скачать Axion Client",
   downloadSub: "Скачайте мод для Fabric 1.21.11, положите в папку mods и запустите Minecraft с Fabric.",
   downloadBtn: "Скачать .jar",
   downloadNoSub: "Скачивание доступно только с активной подпиской.",
@@ -136,7 +136,7 @@ const ru = {
   downloadNamePlaceholder: "Название файла (необязательно)",
 
   welcomeBack: "С возвращением",
-  signinSub: "Войдите в свой аккаунт Cotax Client",
+  signinSub: "Войдите в свой аккаунт Axion Client",
   usernameOrEmail: "Имя пользователя или email",
   password: "Пароль",
   signin: "Войти",
@@ -145,7 +145,7 @@ const ru = {
   createOne: "Создайте",
 
   createAccount: "Создать аккаунт",
-  registerSub: "Зарегистрируйтесь, чтобы скачать Cotax Client",
+  registerSub: "Зарегистрируйтесь, чтобы скачать Axion Client",
   username: "Имя пользователя",
   email: "Email",
   creating: "Создаём...",
@@ -271,12 +271,12 @@ const en: { [K in keyof typeof ru]: (typeof ru)[K] } = {
   cabinet: "Cabinet",
   dashboard: "Dashboard",
   downloadClient: "Download mod",
-  brand: "CotaxClient",
+  brand: "Axion Client",
 
   tagline1: "Private Minecraft client",
   tagline2: "built for serious players",
   heroDesc:
-    "Cotax Client is a private utility client with a focus on combat, smooth animations and clean UI. Access is gated behind HWID licensing.",
+    "Axion Client is a private utility client with a focus on combat, smooth animations and clean UI. Access is gated behind HWID licensing.",
   statProtection: "HWID protection",
   statFabric: "Fabric",
   statFps: "low FPS impact",
@@ -379,7 +379,7 @@ const en: { [K in keyof typeof ru]: (typeof ru)[K] } = {
     betaLife: "https://funpay.com/lots/offer?id=74618024",
   },
 
-  downloadTitle: "Download Cotax Client",
+  downloadTitle: "Download Axion Client",
   downloadSub: "Download the Fabric 1.21.11 mod, put it into the mods folder and launch Minecraft with Fabric.",
   downloadBtn: "Download .jar",
   downloadNoSub: "Download requires an active subscription.",
@@ -393,7 +393,7 @@ const en: { [K in keyof typeof ru]: (typeof ru)[K] } = {
   downloadNamePlaceholder: "File name (optional)",
 
   welcomeBack: "Welcome back",
-  signinSub: "Sign in to your Cotax Client account",
+  signinSub: "Sign in to your Axion Client account",
   usernameOrEmail: "Username or email",
   password: "Password",
   signin: "Sign in",
@@ -402,7 +402,7 @@ const en: { [K in keyof typeof ru]: (typeof ru)[K] } = {
   createOne: "Create one",
 
   createAccount: "Create account",
-  registerSub: "Register to download Cotax Client",
+  registerSub: "Register to download Axion Client",
   username: "Username",
   email: "Email",
   creating: "Creating...",

@@ -6,8 +6,8 @@ import { LangSwitcher } from "@/components/LangSwitcher";
 import { detectLang } from "@/lib/i18n";
 
 export const metadata: Metadata = {
-  title: "Cotax Client",
-  description: "Cotax Client — private Minecraft utility client",
+  title: "Axion Client",
+  description: "Axion Client — private Minecraft utility client",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

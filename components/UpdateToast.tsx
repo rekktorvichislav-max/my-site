@@ -65,20 +65,20 @@ export function UpdateToast() {
         padding: "14px 18px",
         maxWidth: 320,
         color: "#fff",
-        animation: "cotax-toast-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        animation: "axion-toast-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)",
       }}
     >
       <style>{`
-        @keyframes cotax-toast-in {
+        @keyframes axion-toast-in {
           0% { transform: translateY(40px) scale(0.85); opacity: 0; }
           100% { transform: translateY(0) scale(1); opacity: 1; }
         }
-        @keyframes cotax-toast-glow {
+        @keyframes axion-toast-glow {
           0%, 100% { box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2); }
           50% { box-shadow: 0 8px 34px rgba(255, 255, 255, 0.32); }
         }
       `}</style>
-      <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 6, animation: "cotax-toast-glow 2s ease-in-out infinite" }}>
+      <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 6, animation: "axion-toast-glow 2s ease-in-out infinite" }}>
         🚀 Вышло обновление!
       </div>
       <div style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", marginBottom: 10 }}>
