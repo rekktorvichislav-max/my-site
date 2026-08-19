@@ -32,12 +32,12 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "noSubDownload" }, { status: 403 });
   }
 
-  const clientPath = process.env.CLIENT_FILE_PATH ?? path.join(process.cwd(), "data", "client", "cotax-client.jar");
+  const clientPath = process.env.CLIENT_FILE_PATH ?? path.join(process.cwd(), "data", "client", "axion-client.jar");
   if (!fs.existsSync(clientPath)) {
     return NextResponse.json({ error: "Client build not available" }, { status: 404 });
   }
 
-  const fileName = safeFileName(new URL(req.url).searchParams.get("name"), "cotax-client.jar");
+  const fileName = safeFileName(new URL(req.url).searchParams.get("name"), "axion-client.jar");
 
   db.prepare("INSERT INTO downloads (user_id, file, created_at) VALUES (?, ?, ?)").run(
     user.id,

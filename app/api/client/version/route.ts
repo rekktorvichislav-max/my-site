@@ -11,7 +11,7 @@ const DEFAULT_VERSION = "1.0.0";
 export async function GET() {
   let version = process.env.CLIENT_VERSION ?? DEFAULT_VERSION;
 
-  const clientPath = process.env.CLIENT_FILE_PATH ?? path.join(process.cwd(), "data", "client", "cotax-client.jar");
+  const clientPath = process.env.CLIENT_FILE_PATH ?? path.join(process.cwd(), "data", "client", "axion-client.jar");
   try {
     if (fs.existsSync(clientPath)) {
       const stat = fs.statSync(clientPath);
