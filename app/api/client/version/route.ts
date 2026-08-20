@@ -6,7 +6,7 @@ import { getAnnouncement } from "@/lib/announce";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const DEFAULT_VERSION = "1.0.0";
+const DEFAULT_VERSION = "1.2.0";
 
 export async function GET() {
   let version = process.env.CLIENT_VERSION ?? DEFAULT_VERSION;
